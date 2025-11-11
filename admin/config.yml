@@ -1,126 +1,151 @@
 backend:
-  name: git-gateway   # atau "github" kalau langsung ke GitHub
+  name: git-gateway
   branch: main
 
 local_backend: true
 publish_mode: editorial_workflow
 
-site_url: "https://example.com"   # optional
-logo_url: "/assets/admin-logo.png" # optional
+site_url: "https://example.com"        # optional
+logo_url: "/assets/admin-logo.png"     # optional
 
 media_library:
   name: cloudinary
   config:
     cloud_name: YOUR_CLOUD_NAME
     api_key: YOUR_PUBLIC_API_KEY
-    # Optional: contoh transformasi default saat memilih aset
-    # default_transformations:
-    #   - - crop: "fill"
-    #       quality: "auto"
-    #       fetch_format: "auto"
 
-media_folder: "assets/uploads"     # tempat file disimpan (di repo)
-public_folder: "/assets/uploads"   # URL publik di situs
+media_folder: "assets/uploads"         # lokasi file di repo
+public_folder: "/assets/uploads"       # URL publik
 
 collections:
-  #
-  # 1) BLOG  — menyimpan { "posts": [...] } ke blog-data.json
-  #
+  # =========================
+  # 1) BLOG (single-file JSON)
+  # =========================
   - name: "blog"
     label: "Blog"
-    label_singular: "Post"
-    description: "Postingan blog. File tunggal (JSON) berisi array posts."
-    format: "json"
     editor:
       preview: false
-    # tempat kamu simpan JSON di repo
-    file: "blog-data.json"
-    fields:
-      - label: "Posts"
-        name: "posts"
-        widget: "list"
-        summary: "{{fields.title}} — {{fields.author}} ({{fields.date}})"
-        collapsed: true
+    files:
+      - name: "blog_data"
+        label: "Blog Data"
+        file: "blog-data.json"         # -> { "posts": [...] }
+        format: "json"
         fields:
-          - { label: "ID", name: "id", widget: "string", required: false, hint: "Opsional; boleh dikosongkan (akan dibuat otomatis di UI custom)" }
-          - { label: "Judul", name: "title", widget: "string" }
-          - { label: "Tanggal Publikasi", name: "date", widget: "datetime", time_format: false }
-          - { label: "Penulis", name: "author", widget: "string", default: "Dr. Kurniawan" }
-          - { label: "Slug (untuk URL)", name: "slug", widget: "string", hint: "mis. rahasia-tenang-di-panggung" }
-          - { label: "Gambar Sampul", name: "cover", widget: "image", required: false, allow_multiple: false, hint: "Bisa upload ke Cloudinary dari media library" }
-          - label: "Kategori"
-            name: "cat"
-            widget: "select"
-            options:
-              - { label: "Public Speaking", value: "public-speaking" }
-              - { label: "Self Confidence", value: "self-confidence" }
-              - { label: "Parenting", value: "parenting" }
-              - { label: "Catatan", value: "notes" }
-          - { label: "Tags", name: "tags", widget: "list", required: false, hint: "Satu per item (bukan dipisah koma)" }
-          - { label: "Durasi Baca (menit)", name: "readMins", widget: "number", required: false, min: 1, hint: "Kosongkan untuk dihitung otomatis di UI custom" }
-          - { label: "Ringkasan (excerpt)", name: "excerpt", widget: "text", required: false }
-          - label: "Konten (Markdown boleh)"
-            name: "content"
-            widget: "text"
-            hint: "Boleh pakai Markdown. Gambar/video bisa disisipkan via media library."
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.author}} ({{fields.date}})"
+            collapsed: true
+            fields:
+              - { label: "ID", name: "id", widget: "string", required: false }
+              - { label: "Judul", name: "title", widget: "string" }
+              - { label: "Tanggal", name: "date", widget: "datetime", time_format: false }
+              - { label: "Penulis", name: "author", widget: "string", default: "Dr. Kurniawan" }
+              - { label: "Slug (URL)", name: "slug", widget: "string", required: false }
+              - { label: "Gambar Sampul", name: "cover", widget: "image", required: false }
+              - label: "Kategori"
+                name: "cat"
+                widget: "select"
+                options:
+                  - { label: "Public Speaking", value: "public-speaking" }
+                  - { label: "Self Confidence", value: "self-confidence" }
+                  - { label: "Parenting", value: "parenting" }
+                  - { label: "Catatan", value: "notes" }
+              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "Durasi Baca (menit)", name: "readMins", widget: "number", required: false, min: 1 }
+              - { label: "Ringkasan", name: "excerpt", widget: "text", required: false }
+              - { label: "Konten (Markdown boleh)", name: "content", widget: "text" }
 
-  #
-  # 2) GALLERY — menyimpan { "items": [...] } ke gallery-data.json
-  #
+  # ============================
+  # 2) GALLERY (single-file JSON)
+  # ============================
   - name: "gallery"
     label: "Gallery"
-    label_singular: "Item"
-    description: "Galeri kegiatan/foto/video. File tunggal (JSON) berisi array items."
-    format: "json"
     editor:
       preview: false
-    file: "gallery-data.json"
-    fields:
-      - label: "Items"
-        name: "items"
-        widget: "list"
-        summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
-        collapsed: true
+    files:
+      - name: "gallery_data"
+        label: "Gallery Data"
+        file: "gallery-data.json"       # -> { "items": [...] }
+        format: "json"
         fields:
-          - { label: "ID", name: "id", widget: "string", required: false, hint: "Opsional; boleh dikosongkan" }
-          - { label: "Judul / Caption", name: "title", widget: "string" }
-          - label: "Kategori"
-            name: "category"
-            widget: "select"
-            options:
-              - { label: "Seminar", value: "seminar" }
-              - { label: "Workshop", value: "workshop" }
-              - { label: "Keynote", value: "keynote" }
-              - { label: "Sekolah/Komunitas", value: "school" }
-              - { label: "Media/TV", value: "media" }
-              - { label: "Video", value: "video" }
-          - label: "Jenis"
-            name: "type"
-            widget: "select"
-            options:
-              - { label: "Gambar", value: "image" }
-              - { label: "YouTube / Video", value: "video" }
-          - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
-          # Satu kolom 'src' dipakai baik untuk URL gambar (Cloudinary/file) maupun Video (YouTube ID atau URL)
-          - label: "URL Media / YouTube ID"
-            name: "src"
-            widget: "string"
-            hint: "Gambar: URL (Cloudinary/asset). Video: masukkan YouTube ID atau URL video."
-          - { label: "Thumbnail (opsional, untuk video)", name: "thumb", widget: "image", required: false, allow_multiple: false }
-          - { label: "Tags", name: "tags", widget: "list", required: false }
-          - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
+            collapsed: true
+            fields:
+              - { label: "ID", name: "id", widget: "string", required: false }
+              - { label: "Judul / Caption", name: "title", widget: "string" }
+              - label: "Kategori"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Seminar", value: "seminar" }
+                  - { label: "Workshop", value: "workshop" }
+                  - { label: "Keynote", value: "keynote" }
+                  - { label: "Sekolah/Komunitas", value: "school" }
+                  - { label: "Media/TV", value: "media" }
+                  - { label: "Video", value: "video" }
+              - label: "Jenis"
+                name: "type"
+                widget: "select"
+                options:
+                  - { label: "Gambar", value: "image" }
+                  - { label: "YouTube / Video", value: "video" }
+              - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
+              - label: "URL Media / YouTube ID"
+                name: "src"
+                widget: "string"
+                hint: "Gambar: URL Cloudinary/asset. Video: YouTube ID/URL."
+              - { label: "Thumbnail (opsional)", name: "thumb", widget: "image", required: false }
+              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "Deskripsi", name: "desc", widget: "text", required: false }
 
+  # =================================
+  # 3) PUBLICATIONS (single-file JSON)
+  # =================================
   - name: "publications"
     label: "Publications"
-    file: "publications-data.json"
-    fields:
-      - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Authors", name: "authors", widget: "string" }
-      - { label: "Year", name: "year", widget: "number" }
-      - { label: "Tags", name: "tags", widget: "list", default: [] }
-      - { label: "Excerpt", name: "excerpt", widget: "text" }
-      - { label: "Cover Image", name: "cover", widget: "image" }
-      - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
-      - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
-      - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
+    editor:
+      preview: false
+    files:
+      - name: "publications_data"
+        label: "Publications Data"
+        file: "publications-data.json"  # -> array langsung ATAU { "items": [...] }
+        format: "json"
+        fields:
+          # Menangani dua kemungkinan bentuk data:
+          # - array langsung (gunakan "publications" list di bawah)
+          # - atau objek { items: [...] } (gunakan field "items")
+          - label: "Items"
+            name: "items"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Authors", name: "authors", widget: "string" }
+              - { label: "Year", name: "year", widget: "number" }
+              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+              - { label: "Cover Image", name: "cover", widget: "image", required: false }
+              - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
+              - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
+              - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
+          - label: "Publications (Array Langsung)"
+            name: "publications"
+            widget: "list"
+            required: false
+            hint: "Gunakan ini jika file kamu berupa array [] langsung."
+            fields:
+              - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Authors", name: "authors", widget: "string" }
+              - { label: "Year", name: "year", widget: "number" }
+              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+              - { label: "Cover Image", name: "cover", widget: "image", required: false }
+              - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
+              - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
+              - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
