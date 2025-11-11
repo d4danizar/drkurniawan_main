@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tentang – Dr. Kurniawan | Speak with Confidence</title>
+
+  <!-- Fonts + Theme Global -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Halus, hanya layout kecil halaman ini -->
+  <style>
+    .about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center}
+    .about-quote{border-left:6px solid var(--c-gold); background:#F7F8FF; padding:16px 20px; border-radius:var(--rad); font-style:italic}
+    .facts{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .facts .card h4{margin:.25rem 0 .35rem}
+    @media (max-width:880px){.about-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <!-- NAV (konsisten dengan index.html) -->
+  <nav class="nav">
+   <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+
+   <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="index.html">Home</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,120 L80,110 L120,118 L180,95 L220,95 L240,70 L260,95 L320,90 L360,94 L400,70 L430,70 L430,110 L470,105 L520,85 L560,100 L600,80 L640,95 L700,70 L740,70 L760,90 L820,92 L880,80 L930,95 L980,88 L1030,96 L1100,85 L1160,100 L1200,96 L1200,140 L0,140 Z" fill="#000" opacity=".35"/>
+    </svg>
+    <div class="inner">
+      <h1 class="title">Tentang Dr. Kurniawan</h1>
+      <p class="subtitle" style="color:#E8ECFF;max-width:720px">
+        Dosen linguistik, pelatih kepercayaan diri, dan public speaking coach. 
+        Membantu berbicara dengan percaya diri—di kelas, kantor, dan panggung besar.
+      </p>
+    </div>
+  </header>
+
+  <!-- ABOUT: Story + Photo -->
+  <main class="wrap">
+    <section class="about-grid">
+      <div>
+        <p>
+          Saya tidak lahir sebagai orang yang selalu berani. Saya tumbuh dengan kondisi polio di tangan kanan,
+          dan sempat merasa itu akan membatasi hidup saya. Justru dari situ saya belajar: keberanian bukan bakat—ia adalah
+          <em>kebiasaan yang dilatih</em>.
+        </p>
+        <p>
+          Hari ini, sebagai <strong>dosen linguistik</strong> dan <strong>public speaking coach</strong>, saya membantu
+          anak-anak, remaja, dewasa, hingga profesional menemukan suara autentik mereka: berbicara jelas, tenang, dan berdampak.
+        </p>
+        <div class="about-quote card">
+          “Saya dulu minder karena tangan kanan saya polio. Tapi sekarang, tangan kiri saya menulis mimpi dan mengubah hidup banyak orang.”
+        </div>
+        <div class="meta" style="margin-top:12px">
+          <span class="badge">Linguistics</span>
+          <span class="badge">Confidence Coaching</span>
+          <span class="badge">Public Speaking</span>
+        </div>
+      </div>
+      <div class="visual">
+        <!-- Pastikan file ini ada: assets/images/drkurniawan.jpg -->
+        <img class="coach" src="assets/images/drkurniawan.jpg" alt="Dr. Kurniawan">
+      </div>
+    </section>
+
+    <!-- Values / Approach -->
+    <section>
+      <h2 class="section-title">Nilai & Pendekatan</h2>
+      <div class="facts">
+        <article class="card">
+          <h4>Latihan Bertahap</h4>
+          <p>Mulai dari exposure kecil, naikkan level tantangan dengan aman. Setiap sesi punya tujuan terukur.</p>
+        </article>
+        <article class="card">
+          <h4>Bahasa yang Memberdayakan</h4>
+          <p>Bahasa memengaruhi pikiran. Saya gunakan model linguistik untuk membentuk narasi diri yang lebih berdaya.</p>
+        </article>
+        <article class="card">
+          <h4>Umpan Balik Personal</h4>
+          <p>Feedback spesifik, ramah, dan aplikatif—agar kemajuan terasa di panggung maupun keseharian.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Credentials / Impact -->
+    <section>
+      <h2 class="section-title">Jejak Dampak</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <article class="card">
+          <h4>Seminar & Pelatihan</h4>
+          <p>Ratusan sesi untuk siswa, guru, karyawan, dan pemimpin komunitas. Fokus: percaya diri & komunikasi.</p>
+        </article>
+        <article class="card">
+          <h4>Publikasi & Buku</h4>
+          <p>Topik linguistik, komunikasi, dan self-efficacy. Lihat halaman <a href="publications.html">Publications</a>.</p>
+        </article>
+        <article class="card">
+          <h4>Program SpeakUp</h4>
+          <p>Kids, Teens, Adults, hingga Professionals—kurikulum modular yang mudah diikuti.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="cta-strip">
+        <div class="wrap" style="text-align:center;padding:22px 0">
+          <h2 class="section-title" style="color:#fff;margin:0">Ingin Diskusi? Mulai dari Sesi Pengenalan 30 Menit</h2>
+          <p style="color:#E9EEFF;margin:6px 0 12px">Tanpa komitmen. Kenali pendekatan, tetapkan target, dan dapatkan rencana latihan awal.</p>
+          <a class="btn btn-accent" href="https://wa.me/62895800202816?text=Halo%20Dokter%2C%20saya%20ingin%20menjadwalkan%20sesi%20pengenalan%2030%20menit.">Jadwalkan via WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (ikuti gaya index) -->
+  <footer>
+    <div class="container" style="display:grid;gap:12px;grid-template-columns:1fr auto;align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Public Speaking & Kepercayaan Diri</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" href="https://wa.me/6287812844395?text=Halo%20Dokter%2C%20saya%20ingin%20konsultasi">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const WA_NUMBER = '6287812844395';
+    const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+    const waHref = (text)=> `${WA_BASE}?text=${encodeURIComponent(text || 'Halo Dr. Kurniawan, saya ingin berdiskusi.')}`;
+    document.getElementById('waTop').href = waHref('Halo, saya ingin berdiskusi.');
+    
+    document.getElementById('y').textContent=new Date().getFullYear()
+
+    const tog = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+
+  if (tog && links) {
+    tog.addEventListener('click', (e) => {
+      e.stopPropagation(); // supaya klik di tombol gak kena listener body
+      const open = links.classList.toggle('show');
+      tog.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // klik di luar navbar -> tutup menu
+    document.addEventListener('click', (e) => {
+      const clickInsideNav = links.contains(e.target) || tog.contains(e.target);
+      if (!clickInsideNav && links.classList.contains('show')) {
+        links.classList.remove('show');
+        tog.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+  </script>
+</body>
+</html>

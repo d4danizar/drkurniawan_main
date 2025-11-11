@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Blog — Detail Post</title>
+  <meta name="description" content="Artikel dari Blog">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Markdown parser kecil -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- (Opsional) sanitasi HTML jika konten campur HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+</head>
+<body>
+
+  <!-- NAV (disamakan dengan index) -->
+  <nav class="nav">
+    <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="index.html#about">About</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <!-- HEADER ARTIKEL -->
+  <header class="hero" style="padding-bottom:28px">
+    <div class="inner" style="grid-template-columns:1fr; gap:16px;">
+      <div class="copy">
+        <p class="badge" id="postBadge" style="background:var(--c-gold);color:#100810;display:none">Blog</p>
+        <h1 id="postTitle" class="copy h1" style="margin-top:8px;">Memuat…</h1>
+        <div class="meta">
+          <span class="badge" id="postDate" style="background:#fff;color:#100810;display:none"></span>
+          <a class="activities" href="blog.html">← Kembali ke Blog</a>
+        </div>
+      </div>
+      <div class="visual" id="coverWrap" style="display:none">
+        <img id="postCover" class="coach" alt="Sampul artikel">
+      </div>
+    </div>
+  </header>
+
+  <!-- KONTEN -->
+  <main class="wrap" style="max-width:880px">
+    <article id="postContainer" class="card" style="padding:22px">
+      <p class="muted" id="postExcerpt" style="display:none; margin-top:0"></p>
+      <div id="postBody" style="margin-top:10px">Memuat konten…</div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container" style="display:grid; gap:12px; grid-template-columns:1fr auto; align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Public Speaking & Kepercayaan Diri</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" id="waFoot" href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ========= WhatsApp same behavior as index =========
+    const WA_NUMBER = '6287812844395';
+    const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+    function waHref(text){
+      const msg = encodeURIComponent(text || 'Halo Dr. Kurniawan, saya tertarik dengan program SpeakUp.');
+      return `${WA_BASE}?text=${msg}`;
+    }
+    document.getElementById('waTop').href  = waHref('Halo Dokter, saya ingin berkonsultasi.');
+    document.getElementById('waFoot').href = waHref();
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ========= Mobile nav toggle (match index) =========
+    const tog = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    if (tog && links) {
+      tog.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = links.classList.toggle('show');
+        tog.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', (e) => {
+        const clickInside = links.contains(e.target) || tog.contains(e.target);
+        if (!clickInside && links.classList.contains('show')) {
+          links.classList.remove('show');
+          tog.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // ========= Utils =========
+    const $ = s => document.querySelector(s);
+    function getSlug(){
+      const u = new URL(window.location.href);
+      return (u.searchParams.get('slug') || '').trim();
+    }
+    function fmtDate(iso){
+      if(!iso) return '';
+      const d = new Date(iso);
+      if (Number.isNaN(d)) return iso;
+      return d.toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'});
+    }
+    function setMeta(title, desc, image){
+      if(title) document.title = `${title} — Blog`;
+      const ensure = (name, content) => {
+        let m = document.querySelector(`meta[name="${name}"]`);
+        if(!m){ m = document.createElement('meta'); m.setAttribute('name', name); document.head.appendChild(m); }
+        m.setAttribute('content', content);
+      };
+      if(desc) ensure('description', desc);
+      // OG tags (basic)
+      const setOG = (p, c) => {
+        let m = document.querySelector(`meta[property="${p}"]`);
+        if(!m){ m = document.createElement('meta'); m.setAttribute('property', p); document.head.appendChild(m); }
+        m.setAttribute('content', c);
+      };
+      if(title) setOG('og:title', title);
+      if(desc)  setOG('og:description', desc);
+      if(image) setOG('og:image', image);
+    }
+    
+// --- BACA DARI blog-data.json DULU
+async function loadFromJson(slug) {
+  try {
+    const res = await fetch('blog-data.json', { cache: 'no-store' });
+    if (!res.ok) return false;
+    const data = await res.json();
+    const posts = Array.isArray(data) ? data : data.posts || [];
+    const p = posts.find(x => x.slug === slug);
+    if (!p) return false;
+
+    // Header
+    const title = p.title || slug.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+    document.getElementById('postBadge').style.display = 'inline-block';
+    document.getElementById('postTitle').textContent = title;
+
+    if (p.date) {
+      const d = new Date(p.date);
+      document.getElementById('postDate').style.display = 'inline-block';
+      document.getElementById('postDate').textContent = isNaN(d) ? p.date : d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+    }
+
+    if (p.excerpt) {
+      const ex = document.getElementById('postExcerpt');
+      ex.style.display = 'block';
+      ex.textContent = p.excerpt;
+    }
+
+    if (p.cover) {
+      const coverWrap = document.getElementById('coverWrap');
+      const img = document.getElementById('postCover');
+      coverWrap.style.display = 'block';
+      img.src = p.cover;
+      img.alt = title;
+    }
+
+    // Body: dukung markdown atau HTML
+    const raw = p.content || '';
+    const asHtml = /^\s*</.test(raw); // mulai dengan "<" → anggap HTML
+    const html = asHtml ? raw : marked.parse(raw || '');
+    document.getElementById('postBody').innerHTML = window.DOMPurify ? DOMPurify.sanitize(html) : html;
+
+    // Meta SEO
+    (function setMeta(title, desc, image){
+      if(title) document.title = `${title} — Blog`;
+      const ensure = (name, content) => {
+        let m = document.querySelector(`meta[name="${name}"]`);
+        if(!m){ m = document.createElement('meta'); m.setAttribute('name', name); document.head.appendChild(m); }
+        m.setAttribute('content', content);
+      };
+      if(desc) ensure('description', desc);
+      const setOG = (p, c) => {
+        let m = document.querySelector(`meta[property="${p}"]`);
+        if(!m){ m = document.createElement('meta'); m.setAttribute('property', p); document.head.appendChild(m); }
+        m.setAttribute('content', c);
+      };
+      if(title) setOG('og:title', title);
+      if(desc)  setOG('og:description', desc);
+      if(image) setOG('og:image', image);
+    })(title, p.excerpt || '', p.cover || null);
+
+    return true; // sukses dari JSON
+  } catch(_) {
+    return false;
+  }
+}
+    // ========= Fetch logic =========
+    async function fetchFirst(paths){
+      for(const p of paths){
+        try{
+          const res = await fetch(p, {cache:'no-store'});
+          if(res.ok) return {url:p, text: await res.text()};
+        }catch(_){}
+      }
+      return null;
+    }
+
+    function parseFrontmatter(text){
+      // frontmatter minimal: ---\nkey: value\n...\n---\n(body)
+      const m = text.match(/^---\s*[\r\n]+([\s\S]*?)\r?\n---\s*[\r\n]+([\s\S]*)$/);
+      if(!m) return [{}, text];
+      const yaml = m[1];
+      const body = m[2];
+      const meta = {};
+      yaml.split(/\r?\n/).forEach(line=>{
+        const k = line.split(':')[0]?.trim();
+        const v = line.slice(line.indexOf(':')+1).trim().replace(/^"(.*)"$/, '$1').replace(/^'(.*)'$/, '$1');
+        if(k) meta[k] = v;
+      });
+      return [meta, body];
+    }
+
+    function resolveImagePath(path){
+      if(!path) return '';
+      // Jangan utak-atik kalau sudah absolute
+      if(/^https?:\/\//i.test(path)) return path;
+      // Pastikan leading slash untuk path repo statis
+      return path.startsWith('/') ? path : `/${path.replace(/^\.?\//,'')}`;
+    }
+
+    async function run(){
+  const slug = getSlug();
+  if(!slug){
+    $('#postTitle').textContent = 'Artikel tidak ditemukan';
+    $('#postBody').innerHTML = '<p>Parameter <code>?slug=</code> kosong. <a href="blog.html">Kembali ke Blog</a>.</p>';
+    return;
+  }
+
+  // ⬇️ Tambahkan baris ini: coba muat dari blog-data.json dulu
+  const okFromJson = await loadFromJson(slug);
+  if (okFromJson) return;
+
+  // ...lanjutkan ke fallback file .md seperti yang sudah ada...
+
+      // Kandidat lokasi file Markdown (sesuaikan dengan config Decap kamu)
+      const candidates = [
+        `/content/blog/${slug}.md`,
+        `/content/blog/${slug}/index.md`,
+        `/posts/${slug}.md`,
+        `/posts/${slug}/index.md`,
+        `/content/blog/${slug}.html` // fallback jika simpan HTML
+      ];
+
+      const got = await fetchFirst(candidates);
+      if(!got){
+        $('#postTitle').textContent = 'Artikel tidak ditemukan';
+        $('#postBody').innerHTML = `<p>Kami tidak menemukan konten untuk slug <strong>${slug}</strong>.</p>
+                                    <p><a class="activities" href="blog.html">← Kembali ke Blog</a></p>`;
+        return;
+      }
+
+      let raw = got.text;
+      let meta = {};
+      let body = raw;
+
+      // Jika HTML murni (tanpa frontmatter), langsung render
+      if (/^\s*</.test(raw) && !raw.startsWith('---')) {
+        meta = {};
+        body = raw;
+        $('#postBadge').style.display = 'inline-block';
+        $('#postTitle').textContent = slug.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+        $('#postBody').innerHTML = DOMPurify.sanitize(body);
+        setMeta($('#postTitle').textContent, '', null);
+        return;
+      }
+
+      // Markdown + frontmatter minimal
+      [meta, body] = parseFrontmatter(raw);
+
+      // Isi header
+      const title = meta.title || slug.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+      $('#postBadge').style.display = 'inline-block';
+      $('#postTitle').textContent = title;
+
+      if (meta.date) {
+        $('#postDate').style.display = 'inline-block';
+        $('#postDate').textContent = fmtDate(meta.date);
+      }
+
+      if (meta.excerpt) {
+        $('#postExcerpt').style.display = 'block';
+        $('#postExcerpt').textContent = meta.excerpt;
+      }
+
+      if (meta.cover) {
+        const img = resolveImagePath(meta.cover);
+        $('#coverWrap').style.display = 'block';
+        $('#postCover').src = img;
+        $('#postCover').alt = title;
+      }
+
+      // Render body Markdown → HTML + sanitize
+      const html = marked.parse(body);
+      $('#postBody').innerHTML = window.DOMPurify ? DOMPurify.sanitize(html) : html;
+
+      // Meta SEO dasar
+      setMeta(title, meta.excerpt || '', meta.cover ? resolveImagePath(meta.cover) : null);
+    }
+
+    run();
+  </script>
+</body>
+</html>
+

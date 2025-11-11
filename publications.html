@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications | Dr. Kurniawan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== Controls (match blog filter styles) ===== */
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+    .input{padding:.65rem .8rem;border:1px solid #E6E7F2;border-radius:12px;min-width:220px}
+    .chip{padding:.45rem .7rem;border-radius:999px;background:#F2F5FF;border:1px solid #E3E8FF;cursor:pointer}
+
+    /* ===== LIST LAYOUT ===== */
+    #pubList{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+
+    /* Solid card item (no shadow, solid border) */
+    .item{display:flex;gap:14px;align-items:flex-start;padding:12px;border:1px solid #E6E7F2;border-radius:12px;background:#fff;cursor:pointer;transition:transform .04s ease, background .12s ease}
+    .item:active{transform:scale(.998)}
+    .item:focus-within,
+    .item[data-focus="true"]{outline:2px solid #C7D2FE;outline-offset:2px}
+
+    /* Thumbnail */
+    .item .cover{width:120px;aspect-ratio:4/3;object-fit:cover;border-radius:10px;flex:0 0 auto;background:#F6F7FB}
+
+    /* Content */
+    .item .meta{flex:1 1 auto;min-width:0}
+    .item h3{font-size:1rem;line-height:1.3;margin:2px 0 6px}
+    .item p{font-size:.9rem;margin:6px 0}
+    .item small{font-size:.8rem;opacity:.8}
+
+    /* Actions */
+    .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .actions .btn{padding:.5rem .7rem;font-size:.8rem;box-shadow:none}
+
+    /* Empty state */
+    #emptyMsg{text-align:center;margin:18px 0;display:none}
+
+    /* Responsive: stack on small screens */
+    @media (max-width: 560px){
+      .item{flex-direction:column}
+      .item .cover{width:100%;max-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="index.html#about">About</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <header class="hero" style="padding-bottom:32px">
+    <div class="inner" style="grid-template-columns:1fr;">
+      <div class="copy">
+        <p class="badge" style="background:var(--c-gold);color:#100810;">Publications</p>
+        <h1 class="h1">Selected Works and Research Publications</h1>
+        <p>Explore Dr. Kurniawan’s academic journey through published books, journal articles, and digital resources.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Controls: input + chips -->
+    <div class="controls">
+      <input id="search" class="input" placeholder="Cari publikasi... (mis. journal, 2024, DOI)"/>
+      <span class="chip" data-type="all">All</span>
+      <span class="chip" data-type="book">Books</span>
+      <span class="chip" data-type="journal">Journals</span>
+      <span class="chip" data-type="ebook">E-Books</span>
+    </div>
+
+    <!-- LIST container (replacing grid) -->
+    <section id="pubList"></section>
+    <p id="emptyMsg" class="muted">Tidak ada hasil ditemukan.</p>
+  </main>
+
+  <footer>
+    <div class="container" style="display:grid;gap:12px;grid-template-columns:1fr auto;align-items:center;">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="year"></span> SpeakUp Center • Public Speaking & Communication</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" id="waFoot" href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== WhatsApp quick links =====
+    const WA_NUMBER = '6287812844395';
+    const waHref = text => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text||'Halo, saya tertarik dengan karya Anda.')}`;
+    document.getElementById('waTop').href = waHref();
+    document.getElementById('waFoot').href = waHref();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Utilities =====
+    const computeTargetLink = (p) => p.link_doi || p.link_pdf || p.link_buy || '#';
+
+    // Open URL safely in new tab
+    function openExternal(url){
+      if(!url || url === '#') return;
+      window.open(url, '_blank', 'noopener');
+    }
+
+    // ===== Fetch + render =====
+    async function loadPublications(){
+      try{
+        const res = await fetch('publications-data.json', { cache: 'no-store' }); // menggunakan file data yang sama :contentReference[oaicite:2]{index=2}
+        const data = await res.json();
+        const pubs = Array.isArray(data) ? data : (data.items || data.publications || []);
+        renderPubs(pubs);
+        attachItemInteractions();
+        filter();
+      }catch(err){
+        console.error('Gagal memuat data publikasi:', err);
+        document.getElementById('emptyMsg').textContent = 'Gagal memuat data.';
+        document.getElementById('emptyMsg').style.display = 'block';
+      }
+    }
+
+    function renderPubs(pubs){
+      const list = document.getElementById('pubList');
+      list.innerHTML = pubs.map((p, idx) => {
+        const targetLink = computeTargetLink(p);
+        return `
+          <article
+            class="item"
+            data-type="${p.type || ''}"
+            data-tags="${(p.tags||[]).join(',')}"
+            data-link="${targetLink}"
+            role="link"
+            tabindex="0"
+            aria-label="Buka tautan: ${p.title?.replace(/"/g,'&quot;')||'Publikasi'}"
+          >
+            ${p.cover ? `<img src="${p.cover}" alt="${p.title}" class="cover" loading="lazy">` : ''}
+            <div class="meta">
+              <h3>${p.title || ''}</h3>
+              <p><strong>${p.authors || ''}</strong> • <small>${p.year || ''}</small></p>
+              ${p.excerpt ? `<p>${p.excerpt}</p>` : ''}
+              <div class="actions">
+                ${p.link_pdf ? `<a href="${p.link_pdf}" class="btn btn-ghost" target="_blank" rel="noopener" data-action="true">PDF</a>` : ''}
+                ${p.link_buy ? `<a href="${p.link_buy}" class="btn btn-ghost" target="_blank" rel="noopener" data-action="true">Buy</a>` : ''}
+                ${p.link_doi ? `<a href="${p.link_doi}" class="btn btn-ghost" target="_blank" rel="noopener" data-action="true">DOI</a>` : ''}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // ===== Interactions: make the whole card clickable (without nesting <a> in <a>) =====
+    function attachItemInteractions(){
+      const items = document.querySelectorAll('#pubList .item');
+
+      items.forEach(it => {
+        const link = it.getAttribute('data-link');
+
+        // Click anywhere on card
+        it.addEventListener('click', (e) => {
+          // If clicking on one of the inner action links, let it behave normally
+          const isAction = e.target.closest('[data-action="true"]');
+          if (isAction) return;
+
+          openExternal(link);
+        });
+
+        // Keyboard accessibility: Enter / Space
+        it.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openExternal(link);
+          }
+        });
+
+        // Cosmetic focus flag for CSS outline
+        it.addEventListener('focus', () => it.dataset.focus = 'true');
+        it.addEventListener('blur',  () => it.dataset.focus = 'false');
+      });
+    }
+
+    // ===== Filter behavior =====
+    const search = document.getElementById('search');
+    const chips = document.querySelectorAll('.chip');
+    let activeType = 'all';
+
+    search.addEventListener('input', filter);
+    chips.forEach(ch => ch.addEventListener('click', () => {
+      activeType = ch.dataset.type;
+      chips.forEach(x => x.classList.toggle('active', x === ch));
+      filter();
+    }));
+
+    function filter(){
+      const q = (search.value || '').toLowerCase();
+      const items = document.querySelectorAll('#pubList .item');
+      let visible = 0;
+      items.forEach(it => {
+        const matchType = (activeType === 'all') || (it.dataset.type === activeType);
+        const matchSearch = it.textContent.toLowerCase().includes(q);
+        const show = matchType && matchSearch;
+        it.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('emptyMsg').style.display = (visible === 0) ? 'block' : 'none';
+    }
+
+    // ===== Init =====
+    // Memuat halaman publikasi dan merender list dari file HTML ini :contentReference[oaicite:3]{index=3}
+    loadPublications();
+  </script>
+</body>
+</html>

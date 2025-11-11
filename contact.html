@@ -1,0 +1,26 @@
+<!-- ========================= -->
+<!-- File: contact.html         -->
+<!-- ========================= -->
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Contact – Dr. Kurniawan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>:root{--c-blue:#202DA1;--rad:16px;--font-head:"Bebas Neue",system-ui;--font-body:Inter,system-ui}body{margin:0;font-family:var(--font-body)}.nav{position:sticky;top:0;background:#0F1140;color:#fff;padding:12px 20px;display:flex;justify-content:space-between}.nav a{color:#fff;margin-left:14px}.wrap{max-width:840px;margin:0 auto;padding:32px 20px}h1{font-family:var(--font-head);font-size:clamp(32px,4vw,48px)}form{display:grid;gap:12px}.input{padding:.8rem 1rem;border:1px solid #E6E7F2;border-radius:12px}.btn{background:var(--c-blue);color:#fff;border:none;padding:.9rem 1.1rem;border-radius:var(--rad);font-weight:800;cursor:pointer}</style>
+</head>
+<body>
+  <nav class="nav"><div><a href="index.html">Dr. Kurniawan</a></div><div><a href="index.html">Home</a><a href="programs.html">Programs</a><a href="blog.html">Blog</a><a href="publications.html">Publications</a><a href="gallery.html">Gallery</a><a href="contact.html">Contact</a></div></nav>
+  <main class="wrap">
+    <h1>Contact</h1>
+    <p>Hubungi via WhatsApp atau kirim pesan melalui formulir di bawah.</p>
+    <p><a class="btn" href="https://wa.me/62895800202816?text=Halo%20Dokter%2C%20saya%20ingin%20konsultasi">WhatsApp</a></p>
+    <form action="https://formspree.io/f/your-id" method="POST">
+      <input class="input" name="nama" placeholder="Nama" required>
+      <input class="input" name="email" placeholder="Email" type="email" required>
+      <input class="input" name="subjek" placeholder="Subjek" required>
+      <textarea class="input" name="pesan" placeholder="Pesan" rows="5" required></textarea>
+      <button class="btn" type="submit">Kirim</button>
+    </form>
+  </main>
+</body>
+</html>

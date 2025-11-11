@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard Gallery — Dr. Kurniawan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--c:#202DA1;--c2:#2D82CD;--gold:#F3C90D;--ink:#0f102a;--muted:#5c5f73;--rad:14px;--sh:0 10px 24px rgba(0,0,0,.12)}
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui; color:var(--ink); background:#f8f9ff}
+    header{position:sticky;top:0;z-index:10; background:linear-gradient(90deg,var(--c),var(--c2)); color:#fff; padding:14px 18px; box-shadow:0 6px 18px rgba(0,0,0,.15)}
+    h1{font-family:"Bebas Neue",system-ui; letter-spacing:.02em; margin:0}
+    .wrap{max-width:1100px; margin:18px auto; padding:0 16px}
+    .panel{background:#fff; border-radius:var(--rad); box-shadow:var(--sh); padding:14px}
+    .grid{display:grid; gap:12px; grid-template-columns: 1.15fr .85fr}
+    label{font-weight:600; font-size:.92rem}
+    input,select,textarea{width:100%; padding:.7rem .8rem; border:1px solid #e3e6f2; border-radius:10px}
+    textarea{min-height:84px; resize:vertical}
+    .row{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{display:inline-flex; align-items:center; gap:.5rem; padding:.75rem 1rem; border-radius:10px; border:1px solid #e3e6f2; background:#fff; font-weight:700; cursor:pointer}
+    .btn.primary{background:var(--gold)}
+    .btn.save{background:#1e293b; color:#fff}
+    .btn.warn{background:#ef4444; color:#fff}
+    .btn.ghost{background:transparent}
+    .hint{color:var(--muted); font-size:.88rem}
+
+    /* Table */
+    table{width:100%; border-collapse:separate; border-spacing:0 10px}
+    thead th{font-size:.86rem; color:#445; text-transform:uppercase; letter-spacing:.04em}
+    tbody tr{background:#fff; box-shadow:var(--sh)}
+    td,th{padding:10px 12px; vertical-align:top}
+    tr .handle{cursor:grab}
+    .tag{display:inline-block; background:#eef2ff; border:1px solid #e3e8ff; padding:.2rem .5rem; border-radius:999px; margin-right:6px; font-size:.82rem}
+    .pill{display:inline-block; padding:.2rem .5rem; border-radius:999px; font-weight:700; background:#f7f8ff}
+    .thumb{width:100px; aspect-ratio:16/9; object-fit:cover; border-radius:8px}
+
+    @media (max-width: 960px){ .grid{grid-template-columns:1fr} .row{grid-template-columns:1fr} }
+  
+    /* ===== Layout Fix Add-on ===== */
+    .wrap{max-width:1200px}
+    .panel h2{margin:0 0 10px}
+    .grid{gap:16px}
+    .row{grid-template-columns:1.1fr .9fr}
+    .row > div{display:flex; flex-direction:column; gap:6px}
+    .actions{align-items:center; gap:8px; flex-wrap:wrap}
+    .btn{white-space:nowrap}
+    label{margin-bottom:2px}
+    input,select,textarea{min-height:42px}
+
+    /* Table sizing & alignment */
+    table{table-layout:fixed}
+    thead th:nth-child(1){width:36px}
+    thead th:nth-child(2){width:130px}
+    td,th{vertical-align:middle}
+    .thumb{width:130px; height:auto; aspect-ratio:16/9; object-fit:cover; background:#111}
+
+    /* Long text clipping inside Info column */
+    td:nth-child(4) .hint{word-break:break-word}
+
+    /* Buttons column */
+    td:last-child .btn{padding:.6rem .8rem}
+
+    /* Mobile tweaks */
+    @media (max-width: 960px){
+      .grid{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr}
+      thead{display:none}
+      table{border-spacing:0 12px}
+      tbody tr{display:grid; grid-template-columns:120px 1fr; gap:10px; padding:10px; border-radius:12px}
+      tbody td:nth-child(1){grid-column:1/3}
+      tbody td:nth-child(2){grid-row:2/4}
+      tbody td:nth-child(3){grid-column:2; grid-row:2}
+      tbody td:nth-child(4){grid-column:2; grid-row:3}
+      tbody td:nth-child(5){grid-column:1/3; display:flex; gap:8px; justify-content:flex-end}
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dashboard Gallery</h1>
+    <div class="hint">Tanpa backend. Data disimpan di <strong>LocalStorage</strong> dan bisa diexport ke <code>gallery-data.json</code>.</div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid">
+      <!-- Form -->
+      <div class="panel">
+        <h2>Tambah / Edit Item</h2>
+        <div class="row">
+          <div>
+            <label>Judul / Caption</label>
+            <input id="f_title" placeholder="Mis. Seminar Dosen – Retorika Akademik"/>
+          </div>
+          <div>
+            <label>Kategori</label>
+            <select id="f_cat">
+              <option value="seminar">Seminar</option>
+              <option value="workshop">Workshop</option>
+              <option value="keynote">Keynote</option>
+              <option value="school">Sekolah/Komunitas</option>
+              <option value="media">Media/TV</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Jenis</label>
+            <select id="f_type">
+              <option value="image">Gambar</option>
+              <option value="video">YouTube</option>
+            </select>
+          </div>
+          <div>
+            <label>Tanggal (opsional)</label>
+            <input id="f_date" type="date"/>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>URL Media</label>
+            <input id="f_src" placeholder="/assets/gallery/1.jpg atau YOUTUBE_ID"/>
+            <div class="hint">Gambar: path file. Video: masukkan <em>YouTube ID</em> saja.</div>
+            <div style="margin-top:8px">
+              <label>Upload Gambar/Video (Cloudinary)</label>
+              <input id="f_file" type="file" accept="image/*,video/*" multiple/>
+              <div class="actions" style="margin-top:8px">
+                <button class="btn" id="btnUpload" type="button">Upload ke Cloudinary</button>
+                <span id="uploadStatus" class="hint"></span>
+              </div>
+            </div>
+
+          </div>
+          <div>
+            <label>Thumbnail (opsional, untuk video)</label>
+            <input id="f_thumb" placeholder="/assets/gallery/thumb-vid-1.jpg"/>
+          </div>
+        </div>
+        <div>
+          <label>Tags (pisahkan koma)</label>
+          <input id="f_tags" placeholder="mis. dosen, onsite, pitching"/>
+        </div>
+        <div>
+          <label>Deskripsi (opsional)</label>
+          <textarea id="f_desc" placeholder="Ringkasan kegiatan atau catatan singkat"></textarea>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="btnAdd">Tambah</button>
+          <button class="btn" id="btnUpdate" disabled>Update</button>
+          <button class="btn ghost" id="btnReset">Reset</button>
+        </div>
+      </div>
+
+      <!-- Data Panel -->
+      <div class="panel">
+        <h2>Data Gallery</h2>
+        <div class="actions" style="margin-bottom:8px">
+          <button class="btn save" id="btnExport">Export JSON</button>
+          <label class="btn" for="imp">Import JSON<input id="imp" type="file" accept="application/json" hidden></label>
+          <button class="btn warn" id="btnClear">Clear Local</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:24px">⇅</th>
+              <th>Preview</th>
+              <th>Judul</th>
+              <th>Info</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Cara Publish</h2>
+      <ol>
+        <li>Klik <strong>Export JSON</strong> → simpan sebagai <code>gallery-data.json</code> di root situs atau di <code>/assets/</code>.</li>
+        <li>Di <code>gallery.html</code>, panggil <code>fetch('gallery-data.json')</code> (atau path yang kamu pilih) untuk render otomatis.</li>
+      </ol>
+      <p class="hint">Tips: bisa juga commit file JSON ke repo dan host static (GitHub Pages/Netlify/etc.).</p>
+    </section>
+  </main>
+
+  <script>
+
+// --- Ensure video thumb helper is defined early ---
+if (typeof makeVideoThumbUrl === 'undefined') {
+  function makeVideoThumbUrl(secure_url){
+    try{
+      if(typeof secure_url !== 'string') return '';
+      if(secure_url.includes('/video/upload/')){
+        let u = secure_url.replace('/video/upload/', '/video/upload/so_1/');
+        u = u.replace(/\.(mp4|mov|webm|mkv|avi|flv|3gp|wmv)$/i, '');
+        return u + '.jpg';
+      }
+      return '';
+    }catch(_){ return ''; }
+  }
+}
+
+    // ===== State =====
+    const KEY = 'gallery_items_v1';
+    let items = JSON.parse(localStorage.getItem(KEY) || '[]');
+    let editIndex = -1;
+
+    // ===== Elements =====
+    const rows = document.getElementById('rows');
+    const f = {
+      title: document.getElementById('f_title'),
+      cat: document.getElementById('f_cat'),
+      type: document.getElementById('f_type'),
+      date: document.getElementById('f_date'),
+      src: document.getElementById('f_src'),
+      thumb: document.getElementById('f_thumb'),
+      tags: document.getElementById('f_tags'),
+      desc: document.getElementById('f_desc')
+    };
+
+    const btnAdd = document.getElementById('btnAdd');
+    const btnUpdate = document.getElementById('btnUpdate');
+    const btnReset = document.getElementById('btnReset');
+
+    // ===== Utils =====
+    const uid = ()=> Math.random().toString(36).slice(2,10);
+
+    function toRow(it, i){
+      const tr = document.createElement('tr');
+      tr.draggable = true;
+      tr.innerHTML = `
+        <td class="handle" title="Drag to reorder">⋮⋮</td>
+        <td>${it.type==='video' ? `<img class="thumb" src="${it.thumb||`https://i.ytimg.com/vi/${it.src}/hqdefault.jpg`}" alt="thumb">` : `<img class="thumb" src="${it.src}" alt="thumb">`}</td>
+        <td><strong>${it.title||''}</strong><br><span class="pill">${it.category||''}</span> <small>${it.date||''}</small></td>
+        <td>
+          <div class="hint">${it.type.toUpperCase()} • ${it.src}</div>
+          ${(it.tags||[]).map(t=>`<span class='tag'>${t}</span>`).join(' ')}
+          ${it.desc? `<div class="hint">${it.desc}</div>`:''}
+        </td>
+        <td>
+          <button class="btn" data-act="edit">Edit</button>
+          <button class="btn warn" data-act="del">Hapus</button>
+        </td>`;
+
+      // drag-n-drop reorder
+      tr.addEventListener('dragstart', e=>{ tr.classList.add('drag'); e.dataTransfer.setData('text/plain', i.toString()); });
+      tr.addEventListener('dragend', ()=> tr.classList.remove('drag'));
+      tr.addEventListener('dragover', e=> e.preventDefault());
+      tr.addEventListener('drop', e=>{
+        e.preventDefault();
+        const from = +e.dataTransfer.getData('text/plain');
+        const to = i;
+        if(from===to) return;
+        const moved = items.splice(from,1)[0];
+        items.splice(to,0,moved);
+        save();
+      });
+
+      tr.querySelector('[data-act="edit"]').onclick = ()=> loadToForm(i);
+      tr.querySelector('[data-act="del"]').onclick = ()=> { if(confirm('Hapus item ini?')){ items.splice(i,1); save(); } };
+      return tr;
+    }
+
+    function render(){
+      rows.innerHTML = '';
+      items.forEach((it,i)=> rows.appendChild(toRow(it,i)));
+    }
+
+    function save(){
+      localStorage.setItem(KEY, JSON.stringify(items));
+      render();
+      resetForm();
+    }
+
+    function resetForm(){
+      editIndex = -1; btnUpdate.disabled = true; btnAdd.disabled = false;
+      for(const k in f){ f[k].value = ''; }
+      f.cat.value = 'seminar'; f.type.value = 'image';
+    }
+
+    function loadToForm(i){
+      const it = items[i]; if(!it) return;
+      editIndex = i; btnUpdate.disabled = false; btnAdd.disabled = true;
+      f.title.value = it.title||''; f.cat.value = it.category||'seminar'; f.type.value = it.type||'image';
+      f.date.value = it.date||''; f.src.value = it.src||''; f.thumb.value = it.thumb||'';
+      f.tags.value = (it.tags||[]).join(', '); f.desc.value = it.desc||'';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // ===== Cloudinary Unsigned Upload (Image only) =====
+// Auto thumb maker for image URLs (Cloudinary or generic)
+function isCloudinaryUrl(u){ return typeof u === 'string' && u.includes('/image/upload'); }
+function autoThumbForItem(it){
+  if(it.type === 'video'){
+    // leave blank; table renderer already handles YouTube default when thumb missing
+    return it.thumb || '';
+  }
+  // image
+  if(it.thumb) return it.thumb;
+  if(isCloudinaryUrl(it.src)) return makeThumbUrl(it.src);
+  return it.src; // fallback
+}
+
+const CLOUDINARY_CLOUD = 'dy7lzcjfb';   // contoh: 'dani123'
+const CLOUDINARY_PRESET = 'unsigned_gallery';               // samakan dengan preset anda
+
+function readableSize(bytes){
+  const units = ['B','KB','MB','GB']; let i = 0; let v = bytes;
+  while(v >= 1024 && i < units.length-1){ v /= 1024; i++; }
+  return v.toFixed(1)+' '+units[i];
+}
+
+async function uploadToCloudinary(file){
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  const res = await fetch(url, { method: 'POST', body: fd });
+  if(!res.ok){
+    const text = await res.text();
+    throw new Error('Upload gagal: '+text);
+  }
+  return res.json();
+}
+
+function makeThumbUrl(secure_url){
+
+function makeVideoThumbUrl(secure_url){
+  try{
+    let u = secure_url.replace("/video/upload/", "/video/upload/so_1/");
+    u = u.replace(/\.(mp4|mov|webm|mkv|avi|flv|3gp|wmv)$/i, "");
+    if(!u.endsWith(".jpg")) u += ".jpg";
+    return u;
+  }catch(_){ return secure_url; }
+}
+
+  // gunakan transformasi 16:9 (320x180) untuk tabel preview
+  return secure_url.replace('/upload/', '/upload/c_fill,w_320,h_180,q_auto/');
+}
+
+
+document.addEventListener('change', (e)=>{
+  if(e.target && e.target.id === 'f_file'){
+    const files = Array.from(e.target.files || []);
+    const status = document.getElementById('uploadStatus');
+    const imgExtRe = /\.(heic|heif|jpg|jpeg|png|gif|webp|avif|bmp|tif|tiff)$/i;
+    const vidExtRe = /\.(mp4|mov|webm|mkv|avi|flv|3gp|wmv)$/i;
+    if(!files.length){ status.textContent = ''; return; }
+
+    const imgMaxMB = 10, vidMaxMB = 200;
+    for(const file of files){
+      const mime = file.type || '';
+      const name = file.name || '';
+      const isImg = mime.startsWith('image/') || imgExtRe.test(name);
+      const isVid = mime.startsWith('video/') || vidExtRe.test(name);
+      if(!isImg && !isVid){
+        status.textContent = 'Hanya gambar atau video yang didukung.'; e.target.value=''; return;
+      }
+      const maxMB = isImg ? imgMaxMB : vidMaxMB;
+      if(file.size > maxMB*1024*1024){
+        status.textContent = `File ${file.name} terlalu besar (${readableSize(file.size)}), maks ${maxMB}MB untuk ${isImg?'gambar':'video'}.`;
+        e.target.value=''; return;
+      }
+    }
+    status.textContent = `Siap upload: ${files.length} file dipilih.`;
+  }
+});
+
+
+document.addEventListener('click', async (e)=>{
+  if(e.target && e.target.id === 'btnUpload'){
+    const fileInput = document.getElementById('f_file');
+    const status = document.getElementById('uploadStatus');
+    const files = Array.from(fileInput.files || []);
+    if(!files.length){ alert('Pilih file dulu.'); return; }
+
+    const total = files.length;
+    let done = 0;
+    status.textContent = `Mengunggah 0/${total}...`;
+
+    try{
+      for(const file of files){
+        const mime = file.type || '';
+        const name = file.name || '';
+        const isVideo = mime.startsWith('video/') || /\.(mp4|mov|webm|mkv|avi|flv|3gp|wmv)$/i.test(name);
+        const endpoint = isVideo
+          ? `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/video/upload`
+          : `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('upload_preset', CLOUDINARY_PRESET);
+
+        const res = await fetch(endpoint, { method: 'POST', body: fd });
+        if(!res.ok){
+          const text = await res.text();
+          throw new Error(`Upload gagal untuk ${file.name}: ` + text);
+        }
+        const data = await res.json();
+
+        const titleFromFile = file.name.replace(/\.[^/.]+$/, '');
+        const itemType = isVideo ? 'video' : 'image';
+
+        const it = {
+          id: uid(),
+          title: f.title.value.trim() || titleFromFile,
+          category: f.cat.value,
+          type: itemType,
+          date: f.date.value,
+          src: data.secure_url,
+          thumb: isVideo ? makeVideoThumbUrl(data.secure_url) : makeThumbUrl(data.secure_url),
+          tags: f.tags.value.split(',').map(s=>s.trim()).filter(Boolean),
+          desc: f.desc.value.trim()
+        };
+        items.push(it);
+        done++;
+        status.textContent = `Mengunggah ${done}/${total}...`;
+      }
+      save();
+      status.textContent = `Selesai ✅ ${total} file diunggah.`;
+      fileInput.value = '';
+    }catch(err){
+      console.error(err);
+      status.textContent = 'Gagal upload. Lihat console.';
+      alert(err.message);
+    }
+  }
+});
+// ===== END Cloudinary Upload =====
+
+
+    // ===== Actions =====
+    btnAdd.onclick = ()=>{
+      const it = {
+        id: uid(),
+        title: f.title.value.trim(),
+        category: f.cat.value,
+        type: f.type.value,
+        date: f.date.value,
+        src: f.src.value.trim(),
+        thumb: f.thumb.value.trim(),
+        tags: f.tags.value.split(',').map(s=>s.trim()).filter(Boolean),
+        desc: f.desc.value.trim()
+      };
+      // Auto-generate thumb if empty
+      it.thumb = autoThumbForItem(it);
+      if(!it.title || !it.src){ alert('Judul dan URL Media wajib diisi.'); return; }
+      items.push(it); save();
+    };
+
+    btnUpdate.onclick = ()=>{
+      if(editIndex<0) return;
+      const it = items[editIndex];
+      it.title = f.title.value.trim();
+      it.category = f.cat.value; it.type = f.type.value; it.date = f.date.value;
+      it.src = f.src.value.trim(); it.thumb = f.thumb.value.trim();
+      it.tags = f.tags.value.split(',').map(s=>s.trim()).filter(Boolean);
+      it.desc = f.desc.value.trim();
+      // Auto-generate thumb if empty
+      it.thumb = autoThumbForItem(it);
+      if(!it.title || !it.src){ alert('Judul dan URL Media wajib diisi.'); return; }
+      save();
+    };
+
+    btnReset.onclick = resetForm;
+
+    // Import/Export
+    document.getElementById('btnExport').onclick = ()=>{
+      const blob = new Blob([JSON.stringify({items}, null, 2)], {type:'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'gallery-data.json'; a.click(); URL.revokeObjectURL(a.href);
+    };
+    document.getElementById('imp').onchange = (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const rd = new FileReader();
+      rd.onload = ()=>{
+        try{ const data = JSON.parse(rd.result); if(Array.isArray(data)) items = data; else if(Array.isArray(data.items)) items = data.items; else throw new Error('Format tidak dikenal'); save(); }
+        catch(err){ alert('Gagal import: '+err.message); }
+      };
+      rd.readAsText(file);
+    };
+    document.getElementById('btnClear').onclick = ()=>{ if(confirm('Hapus semua data di LocalStorage?')){ localStorage.removeItem(KEY); items=[]; render(); resetForm(); } };
+
+    // Init
+    render();
+  </script>
+</body>
+</html>

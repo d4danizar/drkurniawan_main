@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dr. Kurniawan – SpeakUp Confidence Coaching</title>
+  <meta name="description" content="Program Public Speaking & Kepercayaan Diri untuk Anak, Remaja, Dewasa, dan Profesional oleh Dr. Kurniawan."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --c-dark:#100810; --c-blue:#202DA1; --c-blue-2:#2D82CD; --c-gold:#F3C90D; --c-brown:#AE702B; --c-gray:#B2ABAD;
+      --rad: 16px; --shadow:0 10px 24px rgba(0,0,0,.15);
+      --font-head:"Bebas Neue", system-ui; --font-body: Inter, system-ui;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:var(--font-body); color:var(--c-dark); line-height:1.6; background:#fff}
+    img{max-width:100%; display:block}
+    a{color:inherit; text-decoration:none}
+
+    /* NAV */
+    .nav{position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:12px 20px; background:rgba(16,17,64,.25); backdrop-filter: blur(6px); color:#fff}
+    .brand{font-family:var(--font-head); font-size:28px; letter-spacing:.04em}
+    .nav a.btn{margin-left:8px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex; align-items:center; gap:.5rem; padding:.9rem 1.1rem; border-radius:var(--rad); font-weight:800; text-transform:uppercase; box-shadow:var(--shadow)}
+    .btn-primary{background:var(--c-blue); color:#fff}
+    .btn-accent{background:var(--c-gold); color:#100810}
+    .btn-ghost{background:transparent; color:#fff; border:2px solid rgba(255,255,255,.6)}
+    .btn:hover{transform:translateY(-1px)}
+
+    /* HERO */
+    header.hero{position:relative; color:#fff; background: radial-gradient(120% 120% at 70% 10%, var(--c-blue-2) 0%, var(--c-blue) 55%, #0C1140 100%); overflow:hidden}
+    header .inner{display:grid; grid-template-columns:1.15fr .85fr; gap:32px; padding:48px 20px 80px; align-items:center; max-width:1120px; margin:0 auto}
+    .copy h1{font-family:var(--font-head); font-size: clamp(36px, 6vw, 64px); line-height:.95; margin:6px 0}
+    .copy p{color:#E8ECFF; margin:10px 0 18px}
+    .meta{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap}
+    .badge{display:inline-block; padding:.35rem .7rem; border-radius:999px; background:var(--c-gold); color:#100810; font-weight:800; font-size:.78rem}
+    .visual{justify-self:center}
+    .coach{width:min(420px, 90%); border-radius:var(--rad); box-shadow:var(--shadow)}
+
+    /* skyline */
+    .skyline{position:absolute; inset:auto 0 0 0; height:140px; opacity:.25}
+
+    /* SECTIONS */
+    section{padding:56px 20px}
+    .container{max-width:1120px; margin:0 auto}
+    h2.section-title{font-family:var(--font-head); font-size: clamp(28px, 3.5vw, 40px); letter-spacing:.02em; margin:0 0 10px}
+    .muted{color:#555}
+
+    /* PROGRAMS */
+    .programs{background:#F7F8FF}
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))}
+    .card{background:#fff; border-radius:var(--rad); box-shadow:var(--shadow); padding:18px}
+    .card h3{margin:6px 0 6px; font-size:1.25rem}
+    .card ul{margin:.25rem 0 1rem 1.1rem}
+
+    /* CTA STRIP */
+    .cta-strip{background: linear-gradient(90deg, var(--c-blue) 0%, var(--c-blue-2) 100%); color:#fff; text-align:center; border-radius:var(--rad)}
+    .cta-strip .btn{margin-top:8px}
+
+    /* FOOTER */
+    footer{background:#0F102A; color:#C9D4FF; padding:32px 20px}
+    footer .brand{font-size:24px}
+
+    /* RESPONSIVE */
+    @media (max-width: 880px){
+      header .inner{grid-template-columns:1fr; padding-top:24px}
+      .nav{background:#0F1140}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="brand">Dr. Kurniawan</div>
+    <div>
+      <a class="btn btn-ghost" href="#programs">Program</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,120 L80,110 L120,118 L180,95 L220,95 L240,70 L260,95 L320,90 L360,94 L400,70 L430,70 L430,110 L470,105 L520,85 L560,100 L600,80 L640,95 L700,70 L740,70 L760,90 L820,92 L880,80 L930,95 L980,88 L1030,96 L1100,85 L1160,100 L1200,96 L1200,140 L0,140 Z" fill="#000" opacity=".35"/>
+    </svg>
+    <div class="inner">
+      <div class="copy">
+        <p class="badge" style="background:var(--c-gold); color:#100810;">#CerdasPercayaDiri</p>
+        <h1>Public Speaking & Kepercayaan Diri</h1>
+        <p>Untuk Anak, Remaja, Dewasa, dan Profesional. Pendekatan hangat, latihan bertahap, dan hasil yang bisa diukur.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#programs">Lihat Program</a>
+          <a class="btn btn-accent" id="waHero" href="#">Gratis Coba!</a>
+        </div>
+        <div class="meta">
+          <span class="badge">Kids</span>
+          <span class="badge">Teens</span>
+          <span class="badge">Adults</span>
+          <span class="badge">Professionals</span>
+        </div>
+      </div>
+      <div class="visual">
+        <!-- Ganti src di bawah ini dengan path foto coach milik Anda (PNG/JPG).  -->
+        <img class="coach" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Dr. Kurniawan"/>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROGRAMS -->
+  <section id="programs" class="programs">
+    <div class="container">
+      <h2 class="section-title">Program SpeakUp</h2>
+      <p class="muted">Pilih jalur yang sesuai. Semua program mengutamakan latihan bertahap, umpan balik personal, dan dukungan yang empatik.</p>
+      <div class="grid" style="margin-top:14px">
+        <article class="card">
+          <span class="badge">Kids 7–12</span>
+          <h3>SpeakUp Kids</h3>
+          <ul>
+            <li>Berani berbicara di depan kelas</li>
+            <li>Latihan tampil di atas panggung</li>
+            <li>Kepercayaan diri yang tinggi</li>
+          </ul>
+          <a class="btn btn-primary" data-wa="Kids" href="#">Daftar via WhatsApp</a>
+        </article>
+        <article class="card">
+          <span class="badge">Teens</span>
+          <h3>SpeakUp Teens</h3>
+          <ul>
+            <li>Berani berbicara di depan kelas</li>
+            <li>Latihan tampil di atas panggung</li>
+            <li>Kepercayaan diri yang tinggi</li>
+          </ul>
+          <a class="btn btn-primary" data-wa="Teens" href="#">Daftar via WhatsApp</a>
+        </article>
+        <article class="card">
+          <span class="badge">Adults</span>
+          <h3>SpeakUp Adults</h3>
+          <ul>
+            <li>Berani berbicara di depan banyak orang</li>
+            <li>Presentasi di depan kolega</li>
+            <li>Kepercayaan diri yang tinggi</li>
+          </ul>
+          <a class="btn btn-primary" data-wa="Adults" href="#">Daftar via WhatsApp</a>
+        </article>
+        <article class="card">
+          <span class="badge">Professionals</span>
+          <h3>SpeakUp Professionals</h3>
+          <ul>
+            <li>Berani berbicara di depan umum</li>
+            <li>Tampil di panggung & forum kerja</li>
+            <li>Kepercayaan diri yang tinggi</li>
+          </ul>
+          <a class="btn btn-primary" data-wa="Professionals" href="#">Daftar via WhatsApp</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section class="container">
+    <div class="cta-strip" style="padding:22px">
+      <h2 class="section-title" style="color:#fff;margin:0">Coba Sesi Pengenalan 30 Menit</h2>
+      <p style="margin:6px 0 10px; color:#E9EEFF">Tanpa komitmen. Kenali metode dan susun rencana latihan yang pas untuk Anda/anak Anda.</p>
+      <a class="btn btn-accent" id="waCta" href="#">Jadwalkan via WhatsApp</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:grid; gap:12px; grid-template-columns:1fr auto; align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Public Speaking & Kepercayaan Diri</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" id="waFoot" href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nomor WhatsApp dari brief: 0895800202816 -> format internasional 62
+    const WA_NUMBER = '62895800202816';
+    const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+    const defaultMsg = encodeURIComponent('Halo Dr. Kurniawan, saya tertarik dengan program SpeakUp.');
+
+    function waHref(text){
+      const msg = encodeURIComponent(text || 'Halo Dr. Kurniawan, saya tertarik dengan program SpeakUp.');
+      return `${WA_BASE}?text=${msg}`;
+    }
+
+    // Pasang ke tombol
+    document.getElementById('waTop').href = waHref('Halo Dokter, saya ingin berkonsultasi.');
+    document.getElementById('waHero').href = waHref('Halo, saya mau coba sesi pengenalan 30 menit.');
+    document.getElementById('waCta').href = waHref('Halo, saya mau jadwalkan sesi pengenalan 30 menit.');
+    document.getElementById('waFoot').href = waHref();
+
+    // Link WA per program
+    document.querySelectorAll('[data-wa]').forEach(btn=>{
+      const prog = btn.getAttribute('data-wa');
+      btn.href = waHref(`Halo, saya mau daftar program SpeakUp ${prog}.`);
+    });
+
+    // Tahun footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

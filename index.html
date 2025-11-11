@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dr. Kurniawan – SpeakUp Confidence Coaching</title>
+  <meta name="description" content="Program Public Speaking & Kepercayaan Diri untuk Anak, Remaja, Dewasa, dan Profesional oleh Dr. Kurniawan."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+   <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+
+   <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="about.html">About</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+
+
+  <!-- HERO -->
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,120 L80,110 L120,118 L180,95 L220,95 L240,70 L260,95 L320,90 L360,94 L400,70 L430,70 L430,110 L470,105 L520,85 L560,100 L600,80 L640,95 L700,70 L740,70 L760,90 L820,92 L880,80 L930,95 L980,88 L1030,96 L1100,85 L1160,100 L1200,96 L1200,140 L0,140 Z" fill="#000" opacity=".35"/>
+    </svg>
+    <div class="inner">
+      <div class="copy">
+        <p class="badge" style="background:var(--c-gold); color:#100810;">#CerdasPercayaDiri</p>
+        <h1>National Trainer of Public Speaking & Confidence Building</h1>
+        <p>Pelatihan kepercayaan diri profesional, pendekatan hangat, latihan bertahap, dan hasil yang bisa diukur.</p>
+      <div class="cta">
+        <a class="btn btn-accent" href="about.html">Tentang Saya</a>
+      </div>
+
+      </div>
+      <div class="visual">
+        <img class="coach" src="./assets/images/drkurniawan.jpg" alt="Dr. Kurniawan"/>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT (di Home) -->
+<section id="about" class="wrap">
+  <div class="about-grid" style="display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center">
+    <div>
+      <h2 class="section-title">Tentang Dr. Kurniawan</h2>
+      <p>Saya tidak lahir sebagai orang yang selalu berani. Saya tumbuh dengan kondisi polio di tangan kanan,
+      dan sempat merasa itu akan membatasi hidup saya. Justru dari situ saya belajar: keberanian bukan bakat —
+      ia adalah <em>kebiasaan yang dilatih</em>.</p>
+
+      <p>Sekarang, sebagai <strong>dosen linguistik</strong> dan <strong>public speaking coach</strong>, saya membantu
+      anak-anak, remaja, dewasa, hingga profesional menemukan suara autentik mereka: berbicara jelas, tenang, dan berdampak.</p>
+
+      <div class="card" style="border-left:6px solid var(--c-gold);background:#F7F8FF">
+        <blockquote style="margin:0;font-style:italic">
+          “Saya dulu minder karena tangan kanan saya polio. Tapi sekarang, tangan kiri saya menulis mimpi dan mengubah hidup banyak orang.”
+        </blockquote>
+      </div>
+
+      <div class="meta" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <span class="badge">Linguistics</span>
+        <span class="badge">Confidence Coaching</span>
+        <span class="badge">Public Speaking</span>
+        <span class="badge activities"><a href="about.html">Lihat Lebih Banyak</a></span>
+      </div>
+    </div>
+
+    <div class="visual" style="justify-self:center">
+      <!-- pastikan file ini ada -->
+      <img class="coach" src="./assets/images/drkurniawan.jpg" alt="Dr. Kurniawan"
+           style="width:min(420px,90%);border-radius:var(--rad);box-shadow:var(--shadow)">
+    </div>
+  </div>
+</section>
+
+
+  <!-- CTA STRIP -->
+  
+
+  <footer>
+    <div class="container" style="display:grid; gap:12px; grid-template-columns:1fr auto; align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Public Speaking & Kepercayaan Diri</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" id="waFoot" href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const WA_NUMBER = '6287812844395';
+    const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+
+    function waHref(text){
+      const msg = encodeURIComponent(text || 'Halo Dr. Kurniawan, saya tertarik dengan program SpeakUp.');
+      return `${WA_BASE}?text=${msg}`;
+    }
+
+    document.getElementById('waTop').href = waHref('Halo, saya ingin berkonsultasi.');
+    document.getElementById('waHero').href = waHref('Halo, saya mau coba sesi pengenalan 30 menit.');
+    document.getElementById('waCta').href = waHref('Halo, saya mau jadwalkan sesi pengenalan 30 menit.');
+    document.getElementById('waFoot').href = waHref();
+
+    document.querySelectorAll('[data-wa]').forEach(btn=>{
+      const prog = btn.getAttribute('data-wa');
+      btn.href = waHref(`Halo, saya mau daftar program SpeakUp ${prog}.`);
+    });
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    
+  const tog = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+
+  if (tog && links) {
+    tog.addEventListener('click', (e) => {
+      e.stopPropagation(); // supaya klik di tombol gak kena listener body
+      const open = links.classList.toggle('show');
+      tog.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // klik di luar navbar -> tutup menu
+    document.addEventListener('click', (e) => {
+      const clickInsideNav = links.contains(e.target) || tog.contains(e.target);
+      if (!clickInsideNav && links.classList.contains('show')) {
+        links.classList.remove('show');
+        tog.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  </script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", (user) => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
+
+
+

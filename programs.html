@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Programs – Dr. Kurniawan</title>
+
+  <!-- Fonts + Global Theme -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ===== Match publications.html visual language ===== */
+    .prog-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .prog-card .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .prog-card h3{margin:.35rem 0 .25rem;font-size:1.1rem}
+    .prog-card small{color:#5c5f73}
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 18px}
+    .chip{padding:.45rem .7rem;border-radius:999px;background:#F2F5FF;border:1px solid #E3E8FF;cursor:pointer}
+    .search{padding:.65rem .8rem;border:1px solid #E6E7F2;border-radius:12px;min-width:240px}
+    .pill{display:inline-block;padding:.25rem .6rem;border-radius:999px;background:#F7F8FF;font-weight:700}
+    .prog-card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV (same as other pages) -->
+  <nav class="nav">
+    <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="index.html#about">About</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <!-- HERO (reuse publications hero look) -->
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,120 L80,110 L120,118 L180,95 L220,95 L240,70 L260,95 L320,90 L360,94 L400,70 L430,70 L430,110 L470,105 L520,85 L560,100 L600,80 L640,95 L700,70 L740,70 L760,90 L820,92 L880,80 L930,95 L980,88 L1030,96 L1100,85 L1160,100 L1200,96 L1200,140 L0,140 Z" fill="#000" opacity=".35"/>
+    </svg>
+    <div class="inner">
+      <h1 class="title">Programs</h1>
+      <p class="subtitle" style="color:#E8ECFF;max-width:760px">
+        Portofolio kegiatan: seminar dosen, seminar umum berbayar, keynote/tamu utama, workshop korporat, kelas sekolah/komunitas, dan private coaching.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Controls: Search & Filter -->
+    <div class="filters">
+      <input id="q" class="search" placeholder="Cari program… (mis. keynote, korporat, sekolah)"/>
+      <span class="chip" data-tag="all">Semua</span>
+      <span class="chip" data-tag="academic">Dosen/Akademik</span>
+      <span class="chip" data-tag="public">Seminar Umum</span>
+      <span class="chip" data-tag="keynote">Keynote</span>
+      <span class="chip" data-tag="corporate">Korporat</span>
+      <span class="chip" data-tag="school">Sekolah/Komunitas</span>
+      <span class="chip" data-tag="coaching">Coaching</span>
+    </div>
+
+    <!-- Programs Grid (cards mirror pub-card style) -->
+    <section>
+      <h2 class="section-title">Program Utama</h2>
+      <div class="prog-grid" id="progs">
+        <!-- Seminar Dosen/Akademik -->
+        <article class="card prog-card" data-tags="academic linguistics retorika pedagogi onsite online">
+          <span class="badge">Academic</span>
+          <h3>Seminar Dosen / Akademik</h3>
+          <small>90–150 menit • Onsite/Online</small>
+          <p>Topik linguistik terapan, retorika akademik, dan pedagogi komunikasi. Cocok untuk prodi, fakultas, atau asosiasi ilmiah.</p>
+          <div class="meta">
+            <span class="pill">Materi</span>
+            <span class="pill">Q&A</span>
+            <span class="pill">E-sertifikat</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Seminar Dosen">Undang</a>
+            
+          </div>
+        </article>
+
+        <!-- Seminar Umum Berbayar -->
+        <article class="card prog-card" data-tags="public confidence speaking tiket online onsite">
+          <span class="badge">Public</span>
+          <h3>Leadership Communication Training</h3>
+          <small>2–3 jam • Tiket Individu/Grup</small>
+          <p>Public Speaking & Leadership communication untuk khalayak umum: mahasiswa, jobseeker, komunitas profesional.</p>
+          <div class="meta">
+            <span class="pill">Worksheet</span>
+            <span class="pill">Checklist</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Seminar Umum Berbayar">Kerja Sama</a>
+          </div>
+        </article>
+
+        <!-- Keynote / Tamu Utama -->
+        <article class="card prog-card" data-tags="keynote leadership influence motivasi onsite online">
+          <span class="badge">Keynote</span>
+          <h3>Keynote / Tamu Utama</h3>
+          <small>20–45 menit • Custom Theme</small>
+          <p>Pidato pembuka/acara puncak bertema keberanian, komunikasi memimpin, dan tumbuh dari keterbatasan.</p>
+          <div class="meta">
+            <span class="pill">Storytelling</span>
+            <span class="pill">Meet & Greet</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Keynote / Tamu Utama">Undang Sekarang</a>
+          </div>
+        </article>
+
+        <!-- Workshop Korporat -->
+        <article class="card prog-card" data-tags="corporate leadership pitching presentasi onsite inhouse">
+          <span class="badge">Corporate</span>
+          <h3>Workshop Korporat</h3>
+          <small>1–2 hari • In-house</small>
+          <p>Leadership communication, storytelling untuk pitching, dan presentasi berdampak bagi tim korporat.</p>
+          <div class="meta">
+            <span class="pill">Template Deck</span>
+            <span class="pill">Coaching Grup</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Workshop Korporat">Minta Proposal</a>
+          </div>
+        </article>
+
+        <!-- Kelas Sekolah / Komunitas -->
+        <article class="card prog-card" data-tags="school komunitas teens kids showcase weekly">
+          <span class="badge">School</span>
+          <h3>Kelas Sekolah & Komunitas</h3>
+          <small>6–12 sesi • Mingguan</small>
+          <p>Program SpeakUp untuk Sekolah/Komunitas: latihan bertahap, showcase, dan pembinaan mentor.</p>
+          <div class="meta">
+            <span class="pill">Mini Performance</span>
+            <span class="pill">Feedback</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Kelas Sekolah/Komunitas">Kolaborasi</a>
+          </div>
+        </article>
+
+        <!-- Private Coaching -->
+        <article class="card prog-card" data-tags="coaching 1:1 beasiswa interview sidang presentasi fleksibel">
+          <span class="badge">Coaching</span>
+          <h3>Private Coaching</h3>
+          <small>4 / 8 sesi • 60–90 menit</small>
+          <p>Pendampingan 1:1 untuk target spesifik: ujian beasiswa, sidang, interview, atau presentasi penting.</p>
+          <div class="meta">
+            <span class="pill">Online/Offline</span>
+            <span class="pill">Jadwal Fleksibel</span>
+          </div>
+          <div class="actions">
+            <a class="btn btn-accent" data-wa="Private Coaching">Konsultasi Jadwal</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="cta-strip" style="text-align:center;padding:22px;border-radius:var(--rad)">
+        <h2 class="section-title" style="color:#fff;margin:0">Butuh paket program untuk kampus/korporat?</h2>
+        <p style="color:#E9EEFF;margin:6px 0 12px">Kami sediakan rundown, modul latihan, dan deck presentasi yang bisa disesuaikan.</p>
+        <a class="btn btn-accent" id="waCta" href="#">Diskusikan via WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container" style="display:grid;gap:12px;grid-template-columns:1fr auto;align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Programs</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" id="waFoot" href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Reuse video dialog if needed (optional) -->
+  <dialog id="progVideo" class="story-modal">
+    <div class="story-frame">
+      <button class="story-close" aria-label="Close">✕</button>
+      <iframe src="" title="Program Video" allowfullscreen></iframe>
+    </div>
+  </dialog>
+
+  <script>
+    // ===== WhatsApp helper (follow pattern on other pages) =====
+    const WA_NUMBER = '6287812844395';
+    const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+    function waHref(text){
+      const msg = encodeURIComponent(text || 'Halo Dr. Kurniawan, saya tertarik dengan program SpeakUp.');
+      return `${WA_BASE}?text=${msg}`;
+    }
+
+    document.getElementById('waTop').href = waHref('Halo Dokter, saya ingin berkonsultasi program.');
+    document.getElementById('waCta').href = waHref('Halo, kami butuh paket program untuk kampus/korporat.');
+    document.getElementById('waFoot').href = waHref();
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Filter + search (same logic as publications)
+    const chips=[...document.querySelectorAll('.chip')];
+    const cards=[...document.querySelectorAll('.prog-card')];
+    const q=document.getElementById('q');
+    let active='all';
+    function apply(){
+      const s=(q?.value||'').toLowerCase();
+      cards.forEach(c=>{
+        const tags=(c.dataset.tags||'').toLowerCase();
+        const text=c.innerText.toLowerCase();
+        const okTag=active==='all'||tags.includes(active);
+        const okText=!s||text.includes(s);
+        c.style.display=(okTag&&okText)?'':'none';
+      });
+    }
+    chips.forEach(ch=>ch.addEventListener('click',()=>{active=ch.dataset.tag;apply()}));
+    q?.addEventListener('input',apply);
+
+    // Navbar toggle (consistency)
+    const tog=document.querySelector('.nav-toggle');
+    const links=document.querySelector('.nav-links');
+    if(tog&&links){
+      tog.addEventListener('click',(e)=>{e.stopPropagation(); const open=links.classList.toggle('show'); tog.setAttribute('aria-expanded', open?'true':'false');});
+      document.addEventListener('click',(e)=>{const inside=links.contains(e.target)||tog.contains(e.target); if(!inside&&links.classList.contains('show')){links.classList.remove('show'); tog.setAttribute('aria-expanded','false');}});
+    }
+
+    // Optional video dialog (if using data-video buttons)
+    const progVideo=document.getElementById('progVideo');
+    const progIframe=progVideo.querySelector('iframe');
+    document.querySelectorAll('[data-video]').forEach(btn=>{
+      btn.addEventListener('click',()=>{ const id=btn.getAttribute('data-video'); progIframe.src=`https://www.youtube.com/embed/${id}`; progVideo.showModal();});
+    });
+    progVideo?.addEventListener('click',(e)=>{ if(e.target===progVideo){ progVideo.close(); }});
+    progVideo?.addEventListener('close',()=>{ progIframe.src=''; });
+
+    // Auto-assign WA to program buttons
+    document.querySelectorAll('[data-wa]').forEach(btn=>{
+      const label=btn.getAttribute('data-wa');
+      btn.href=waHref(`Halo, saya mau diskusi mengenai ${label}. Mohon info jadwal & biaya.`);
+    });
+  </script>
+</body>
+</html>

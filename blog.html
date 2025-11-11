@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Blog – Dr. Kurniawan</title>
+  <meta name="description" content="Artikel seputar public speaking, kepercayaan diri, parenting komunikasi, dan karier."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+    .input{padding:.65rem .8rem;border:1px solid #E6E7F2;border-radius:12px;min-width:220px}
+    .chip{padding:.45rem .7rem;border-radius:999px;background:#F2F5FF;border:1px solid #E3E8FF;cursor:pointer}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{border:1px solid #EEF1FF;border-radius:var(--rad);padding:14px;box-shadow:var(--shadow)}
+    .card small{color:#5c5f73}
+    .card h3{margin:.25rem 0 .4rem;font-size:1.2rem}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+    .badge{padding:.3rem .6rem;border-radius:999px;background:var(--c-gold);color:#100810;font-weight:800;font-size:.75rem}
+    #posts .card > a { display:block; text-decoration:none; color:inherit; }
+    #posts .card img { display:block; width:100%; height:auto; border-radius:12px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV (konsisten dengan halaman lain) -->
+  <nav class="nav">
+   <div class="brand"><a href="index.html">Dr. Kurniawan</a></div>
+
+   <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="#about">About</a>
+      <a class="btn btn-ghost" href="publications.html">Publications</a>
+      <a class="btn btn-ghost" href="blog.html">Blog</a>
+      <a class="btn btn-ghost" href="programs.html">Program</a>
+      <a class="btn btn-ghost" href="gallery.html">Gallery</a>
+      <a class="btn btn-accent" id="waTop" href="#">WhatsApp</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <svg class="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,120 L80,110 L120,118 L180,95 L220,95 L240,70 L260,95 L320,90 L360,94 L400,70 L430,70 L430,110 L470,105 L520,85 L560,100 L600,80 L640,95 L700,70 L740,70 L760,90 L820,92 L880,80 L930,95 L980,88 L1030,96 L1100,85 L1160,100 L1200,96 L1200,140 L0,140 Z" fill="#000" opacity=".35"/>
+    </svg>
+    <div class="inner">
+      <h1 class="title">Blog & Artikel</h1>
+      <p class="subtitle" style="color:#E8ECFF;max-width:720px">
+        Kumpulan tulisan seputar public speaking, percaya diri, komunikasi positif, dan kisah perjalanan saya melatih orang Indonesia tampil berani.
+      </p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="controls">
+      <input id="search" class="input" placeholder="Cari artikel... (mis. grogi, presentasi, anak)"/>
+      <span class="chip" data-tag="all">Semua</span>
+      <span class="chip" data-tag="public-speaking">Public Speaking</span>
+      <span class="chip" data-tag="self-esteem">Self-Esteem</span>
+      <span class="chip" data-tag="parenting">Parenting</span>
+      <span class="chip" data-tag="career">Career</span>
+    </div>
+
+    <section class="grid" id="posts">
+      
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container" style="display:grid;gap:12px;grid-template-columns:1fr auto;align-items:center">
+      <div>
+        <div class="brand">Dr. Kurniawan</div>
+        <small>© <span id="y"></span> SpeakUp Center • Public Speaking & Kepercayaan Diri</small>
+      </div>
+      <div>
+        <a class="btn btn-accent" href="https://wa.me/6287812844395?text=Halo%20Dokter%2C%20saya%20ingin%20konsultasi">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  const WA_NUMBER = '6287812844395';
+  const WA_BASE = `https://wa.me/${WA_NUMBER}`;
+  const waHref = (text)=> `${WA_BASE}?text=${encodeURIComponent(text || 'Halo Dr. Kurniawan, saya ingin berdiskusi.')}`;
+  document.getElementById('waTop').href = waHref('Halo, saya ingin berdiskusi.');
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const search = document.getElementById('search');
+    const chips = document.querySelectorAll('.chip');
+    const cards = [...document.querySelectorAll('#posts .card')];
+    let activeTag = 'all';
+
+    function filter(){
+      const q = (search.value || '').toLowerCase();
+      cards.forEach(c=>{
+        const text = c.innerText.toLowerCase();
+        const tags = (c.dataset.tags||'').split(' ');
+        const matchText = !q || text.includes(q);
+        const matchTag = activeTag==='all' || tags.includes(activeTag);
+        c.style.display = (matchText && matchTag) ? '' : 'none';
+      });
+    }
+    search.addEventListener('input', filter);
+    chips.forEach(ch=> ch.addEventListener('click', ()=>{ activeTag = ch.dataset.tag; filter(); }));
+
+    const tog = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+
+  if (tog && links) {
+    tog.addEventListener('click', (e) => {
+      e.stopPropagation(); // supaya klik di tombol gak kena listener body
+      const open = links.classList.toggle('show');
+      tog.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // klik di luar navbar -> tutup menu
+    document.addEventListener('click', (e) => {
+      const clickInsideNav = links.contains(e.target) || tog.contains(e.target);
+      if (!clickInsideNav && links.classList.contains('show')) {
+        links.classList.remove('show');
+        tog.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // === Helper untuk hitung durasi baca ===
+  const WPM = 180;
+  function estimateReadMins(text = '') {
+    const words = (text.match(/\S+/g) || []).length;
+    return Math.max(1, Math.ceil(words / WPM));
+  }
+
+  // === Fetch data blog dari JSON ===
+  (async function loadBlog() {
+    const container = document.getElementById('posts');
+    if (!container) return;
+
+    try {
+      const res = await fetch('blog-data.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const posts = Array.isArray(data) ? data : data.posts || [];
+
+      // Sort (newest first)
+      posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+      // Render list
+      container.innerHTML = '';
+      posts.forEach(p => {
+        const mins = p.readMins || estimateReadMins(p.content || '');
+        const cat = p.cat || 'notes';
+
+        const article = document.createElement('article');
+        article.className = 'card';
+        article.dataset.tags = [cat, ...(p.tags || [])].join(' ');
+
+       article.innerHTML = `
+          <a href="post.html?slug=${p.slug}">
+          ${p.cover ? `<img src="${p.cover}" alt="${p.title}">` : ''}
+          <small>${p.date || ''} • ${mins} min read</small>
+          <h3>${p.title || ''}</h3>
+          <p>${p.excerpt || ''}</p>
+          <div class="meta">
+            <span class="badge">${cat.replace(/-/g, ' ')}</span>
+          </div>
+          </a>
+      `;
+
+
+        container.appendChild(article);
+      });
+
+      // === Filter (chips + search) tetap bekerja ===
+      const search = document.getElementById('search');
+      const chips = document.querySelectorAll('.chip');
+      let activeTag = 'all';
+
+      function filterPosts() {
+        const q = (search?.value || '').toLowerCase();
+        const cards = container.querySelectorAll('.card');
+
+        cards.forEach(card => {
+          const text = card.innerText.toLowerCase();
+          const tags = card.dataset.tags.split(' ');
+          const okText = !q || text.includes(q);
+          const okTag = activeTag === 'all' || tags.includes(activeTag);
+          card.style.display = okText && okTag ? '' : 'none';
+        });
+      }
+
+      search?.addEventListener('input', filterPosts);
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          activeTag = chip.dataset.tag;
+          filterPosts();
+        });
+      });
+
+      
+    } catch (err) {
+      console.warn('Gagal memuat blog-data.json:', err);
+    }
+  })();
+</script>
+  
+</body>
+</html>
+
+
+
