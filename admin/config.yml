@@ -13,6 +13,9 @@ media_library:
   config:
     cloud_name: "dy7lzcjfb"
     api_key: "442928447151659"
+    default_transformations:
+      - - fetch_format: "auto"
+          quality: "auto"
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
