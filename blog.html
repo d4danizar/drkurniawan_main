@@ -24,19 +24,23 @@
 
   </style>
   <script>
-    function formatDateID(input) {
-      if (!input) return '';
-      const d = new Date(input);
-      if (isNaN(d)) return input;
-      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-    }
+  function formatDateID(input) {
+    if (!input) return '';
+    const d = new Date(input);
+    if (isNaN(d)) return input;
+    return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
 
-    function estimateReadMins(text) {
-      const wpm = 200;
-      const words = (text || '').trim().split(/\s+/).length;
-      return Math.max(1, Math.round(words / wpm));
-    }
-    </script>
+  function estimateReadMins(text) {
+    const wpm = 200;
+    const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / wpm));
+  }
+
+  // Simple escaper biar HTML aman & nggak merusak atribut
+  function esc(s){ return String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+</script>
+
 
 </head>
 <body>
@@ -170,77 +174,126 @@ article.innerHTML = `
   </a>
 `;
 
-  // === Fetch data blog dari JSON ===
-  (async function loadBlog() {
-    const container = document.getElementById('posts');
-    if (!container) return;
+  <script>
+document.addEventListener('DOMContentLoaded', loadBlog);
 
-    try {
-      // 🔧 pakai path absolut + cache-buster
-      const res = await fetch(`/blog-data.json?v=${Date.now()}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      const posts = Array.isArray(data) ? data : data.posts || [];
+async function loadBlog() {
+  const container = document.getElementById('posts');
+  if (!container) return;
 
-      // Urut terbaru dulu
-      posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  try {
+    // pakai path absolut + cache-buster
+    const res = await fetch('/blog-data.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
 
-      // Render
-      container.innerHTML = '';
-      posts.forEach(p => {
-        const mins = p.readMins || estimateReadMins(p.content || '');
-        const cat = p.cat || 'notes';
+    const data = await res.json();
+    const posts = Array.isArray(data?.posts) ? data.posts : (Array.isArray(data) ? data : []);
 
-        const article = document.createElement('article');
-        article.className = 'card';
-        article.dataset.tags = [cat, ...(p.tags || [])].join(' ');
-
-        article.innerHTML = `
-          <a href="post.html?slug=${p.slug}">
-            ${p.cover ? `<img src="${p.cover}" alt="${p.title}">` : ''}
-            <small>${p.date || ''} • ${mins} min read</small>
-            <h3>${p.title || ''}</h3>
-            <p>${p.excerpt || ''}</p>
-            <div class="meta">
-              <span class="badge">${cat.replace(/-/g, ' ')}</span>
-            </div>
-          </a>
-        `;
-        container.appendChild(article);
-      });
-
-      // Filter tetap
-      const search = document.getElementById('search');
-      const chips = document.querySelectorAll('.chip');
-      let activeTag = 'all';
-
-      function filterPosts() {
-        const q = (search?.value || '').toLowerCase();
-        const cards = container.querySelectorAll('.card');
-        cards.forEach(card => {
-          const text = card.innerText.toLowerCase();
-          const tags = card.dataset.tags.split(' ');
-          const okText = !q || text.includes(q);
-          const okTag = activeTag === 'all' || tags.includes(activeTag);
-          card.style.display = okText && okTag ? '' : 'none';
-        });
-      }
-
-      search?.addEventListener('input', filterPosts);
-      chips.forEach(chip => chip.addEventListener('click', () => { activeTag = chip.dataset.tag; filterPosts(); }));
-
-      // Optional: tampilkan empty state
-      if (posts.length === 0) {
-        container.innerHTML = '<p class="muted">Belum ada artikel.</p>';
-      }
-    } catch (err) {
-      console.warn('Gagal memuat blog-data.json:', err);
+    // kalau kosong, tampilkan empty state
+    if (!posts.length) {
+      container.innerHTML = '<p class="muted">Belum ada artikel.</p>';
+      return;
     }
-  })();
+
+    // urut terbaru dulu
+    posts.sort((a,b) => String(b.date||'').localeCompare(String(a.date||'')));
+
+    container.innerHTML = '';
+    for (const p of posts) {
+      const mins = p.readMins || estimateReadMins(p.content || '');
+      const dateStr = formatDateID(p.date);
+      const coverHTML = p.cover ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title||'') + '">' : '';
+
+      const article = document.createElement('article');
+      article.className = 'card';
+      article.dataset.tags = [p.cat || 'notes', ...(p.tags || [])].join(' ');
+
+      article.innerHTML =
+        '<a href="post.html?slug=' + encodeURIComponent(p.slug || '') + '">' +
+          coverHTML +
+          '<small>' +
+            (dateStr ? esc(dateStr) : '') +
+            (dateStr && mins ? ' • ' : '') +
+            (mins ? esc(mins + ' min read') : '') +
+          '</small>' +
+          '<h3>' + esc(p.title || '') + '</h3>' +
+          '<p>' + esc(p.excerpt || '') + '</p>' +
+          '<div class="meta"><span class="badge">' + esc((p.cat || 'notes').replace(/-/g,' ')) + '</span></div>' +
+        '</a>';
+
+      container.appendChild(article);
+    }
+
+    // (opsional) kalau kamu punya input pencarian/chips filter, panggil fungsi filter-mu di sini
+    // filterPosts();
+  } catch (err) {
+    console.error('Gagal memuat blog-data.json:', err);
+    container.innerHTML = '<p class="muted">Gagal memuat artikel.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadBlog);
+
+async function loadBlog() {
+  const container = document.getElementById('posts');
+  if (!container) return;
+
+  try {
+    // pakai path absolut + cache-buster
+    const res = await fetch('/blog-data.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
+    const data = await res.json();
+    const posts = Array.isArray(data?.posts) ? data.posts : (Array.isArray(data) ? data : []);
+
+    // kalau kosong, tampilkan empty state
+    if (!posts.length) {
+      container.innerHTML = '<p class="muted">Belum ada artikel.</p>';
+      return;
+    }
+
+    // urut terbaru dulu
+    posts.sort((a,b) => String(b.date||'').localeCompare(String(a.date||'')));
+
+    container.innerHTML = '';
+    for (const p of posts) {
+      const mins = p.readMins || estimateReadMins(p.content || '');
+      const dateStr = formatDateID(p.date);
+      const coverHTML = p.cover ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title||'') + '">' : '';
+
+      const article = document.createElement('article');
+      article.className = 'card';
+      article.dataset.tags = [p.cat || 'notes', ...(p.tags || [])].join(' ');
+
+      article.innerHTML =
+        '<a href="post.html?slug=' + encodeURIComponent(p.slug || '') + '">' +
+          coverHTML +
+          '<small>' +
+            (dateStr ? esc(dateStr) : '') +
+            (dateStr && mins ? ' • ' : '') +
+            (mins ? esc(mins + ' min read') : '') +
+          '</small>' +
+          '<h3>' + esc(p.title || '') + '</h3>' +
+          '<p>' + esc(p.excerpt || '') + '</p>' +
+          '<div class="meta"><span class="badge">' + esc((p.cat || 'notes').replace(/-/g,' ')) + '</span></div>' +
+        '</a>';
+
+      container.appendChild(article);
+    }
+
+    // (opsional) kalau kamu punya input pencarian/chips filter, panggil fungsi filter-mu di sini
+    // filterPosts();
+  } catch (err) {
+    console.error('Gagal memuat blog-data.json:', err);
+    container.innerHTML = '<p class="muted">Gagal memuat artikel.</p>';
+  }
+}
 </script>
+
   
 </body>
 </html>
+
 
 
 
