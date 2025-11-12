@@ -23,6 +23,21 @@
     #posts .card img { display:block; width:100%; height:auto; border-radius:12px; }
 
   </style>
+  <script>
+    function formatDateID(input) {
+      if (!input) return '';
+      const d = new Date(input);
+      if (isNaN(d)) return input;
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function estimateReadMins(text) {
+      const wpm = 200;
+      const words = (text || '').trim().split(/\s+/).length;
+      return Math.max(1, Math.round(words / wpm));
+    }
+    </script>
+
 </head>
 <body>
 
@@ -135,6 +150,26 @@
     return Math.max(1, Math.ceil(words / WPM));
   }
 
+  const mins = p.readMins || estimateReadMins(p.content || '');
+  const dateStr = formatDateID(p.date);
+
+// …
+article.innerHTML = `
+  <a href="post.html?slug=${p.slug}">
+    ${p.cover ? `<img src="${p.cover}" alt="${p.title}">` : ''}
+    <small>
+      ${dateStr ? `${dateStr}` : ''}
+      ${dateStr && mins ? ' • ' : ''}
+      ${mins ? `${mins} min read` : ''}
+    </small>
+    <h3>${p.title || ''}</h3>
+    <p>${p.excerpt || ''}</p>
+    <div class="meta">
+      <span class="badge">${(p.cat || 'notes').replace(/-/g, ' ')}</span>
+    </div>
+  </a>
+`;
+
   // === Fetch data blog dari JSON ===
   (async function loadBlog() {
     const container = document.getElementById('posts');
@@ -206,6 +241,7 @@
   
 </body>
 </html>
+
 
 
 
