@@ -58,6 +58,14 @@
       "type": "video",
       "id": "if35haky",
       "category": "seminar"
+    },
+    {
+      "title": "Public Speaking dan Leadership Communication",
+      "type": "image",
+      "category": "seminar",
+      "date": "2025-11-01T00:00:00.000+07:00",
+      "src": "-",
+      "thumb": "https://res.cloudinary.com/dy7lzcjfb/image/upload/f_auto,q_auto/v1762965034/IMG_7062_xverma.heic"
     }
   ]
 }
