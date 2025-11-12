@@ -28,36 +28,44 @@
       "category": "Keynote"
     },
     {
-      "id": "sqfljy5o",
-      "title": "Seminar Public Speaking MA Al-Mukmin Ngruki",
-      "category": "seminar",
-      "type": "image",
-      "date": "2024-08-19",
       "src": "https://res.cloudinary.com/dy7lzcjfb/image/upload/v1762656078/yoe4gjsgal4ic65cnee7.heic",
+      "date": "2024-08-19",
+      "desc": "",
       "thumb": "https://res.cloudinary.com/dy7lzcjfb/image/upload/c_fill,w_320,h_180,q_auto/v1762656078/yoe4gjsgal4ic65cnee7.heic",
+      "title": "Seminar Public Speaking MA Al-Mukmin Ngruki",
       "tags": [
         "Seminar",
         "Public Speaking",
         "SMA",
         "MA"
       ],
-      "desc": ""
+      "type": "image",
+      "id": "sqfljy5o",
+      "category": "seminar"
     },
     {
-      "id": "if35haky",
-      "title": "Seminar Public Speaking MA Al-Mukmin Ngruki",
-      "category": "seminar",
-      "type": "video",
-      "date": "2024-08-19",
       "src": "https://res.cloudinary.com/dy7lzcjfb/video/upload/v1762656081/zjh8dznlf69ypeb6t2bg.mov",
+      "date": "2024-08-19",
+      "desc": "",
       "thumb": "https://res.cloudinary.com/dy7lzcjfb/video/upload/so_1/v1762656081/zjh8dznlf69ypeb6t2bg.jpg",
+      "title": "Seminar Public Speaking MA Al-Mukmin Ngruki",
       "tags": [
         "Seminar",
         "Public Speaking",
         "SMA",
         "MA"
       ],
-      "desc": ""
+      "type": "video",
+      "id": "if35haky",
+      "category": "seminar"
+    },
+    {
+      "title": "Public Speaking dan Leadership Communication Malang",
+      "category": "seminar",
+      "type": "image",
+      "date": "2025-11-01T00:00:00.000+07:00",
+      "thumb": "https://res.cloudinary.com/dy7lzcjfb/image/upload/f_auto,q_auto/v1762965034/IMG_7062_xverma.heic",
+      "src": "-"
     }
   ]
 }
