@@ -6,6 +6,15 @@
   <title>Content Manager</title>
   <!-- Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" defer></script>
+  <script src="https://unpkg.com/@decap-cms/media-library-cloudinary@^3.0.0/dist/decap-cms-media-library-cloudinary.js" defer></script>
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.CMS && window.cloudinaryMediaLibrary) {
+      CMS.registerMediaLibrary(window.cloudinaryMediaLibrary);
+    }
+  });
+  </script>
+
   <style>
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Calibri,Arial,sans-serif}
   </style>
