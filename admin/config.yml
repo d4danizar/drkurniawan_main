@@ -69,19 +69,14 @@ collections:
         file: "gallery-data.json"
         format: "json"
         fields:
-          - label: "Items"
-            name: "items"
-            widget: "list"
-            summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
-            collapsed: true
-            fields:
-                    - label: "Items"
+                - label: "Items"
         name: "items"
         widget: "list"
         summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
         collapsed: true
         fields:
           - { label: "Judul / Caption", name: "title", widget: "string" }
+
           - label: "Kategori"
             name: "category"
             widget: "select"
@@ -92,25 +87,35 @@ collections:
               - { label: "Sekolah/Komunitas", value: "school" }
               - { label: "Media/TV", value: "media" }
               - { label: "Video", value: "video" }
+
           - label: "Jenis"
             name: "type"
             widget: "select"
             options:
               - { label: "Gambar", value: "image" }
-              - { label: "YouTube / Video", value: "video" }
+              - { label: "Video",  value: "video" }
+
           - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
 
-          #HEIC via Cloudinary otomatis dikonversi
-          - label: "URL Media / YouTube ID"
+          # Media file dari Cloudinary (gambar / video). OPTIONAL.
+          - label: "Media (Cloudinary/URL)"
             name: "src"
             widget: "file"
-            hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi (f_auto,q_auto). Untuk YouTube, isi dengan URL/ID."
+            required: false
+            hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi."
 
-          # opsional thumb juga "file" biar bisa ambil dari Cloudinary
+          # Khusus kalau sumbernya YouTube (ID atau URL). OPTIONAL.
+          - label: "YouTube (ID atau URL)"
+            name: "youtube"
+            widget: "string"
+            required: false
+            hint: "Isi salah satu: YouTube atau Media di atas."
+
           - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
 
           - { label: "Tags", name: "tags", widget: "list", required: false }
           - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+
 
   # PUBLICATIONS
   - name: "publications"
