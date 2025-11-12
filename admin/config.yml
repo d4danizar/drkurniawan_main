@@ -5,30 +5,29 @@ backend:
 local_backend: true
 publish_mode: editorial_workflow
 
-site_url: "https://drkurniawan.com"        # optional
-logo_url: "/assets/admin-logo.png"     # optional
+site_url: "https://drkurniawan.com"
+logo_url: "/assets/admin-logo.png"
 
 media_library:
   name: cloudinary
   config:
-    cloud_name: dy7lzcjfb
-    api_key: 442928447151659
+    cloud_name: "dy7lzcjfb"
+    api_key: "442928447151659"
 
-media_folder: "assets/uploads"         # lokasi file di repo
-public_folder: "/assets/uploads"       # URL publik
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
 
 collections:
-  # =========================
-  # 1) BLOG (single-file JSON)
-  # =========================
+  # BLOG
   - name: "blog"
     label: "Blog"
-    editor:
-      preview: false
+    label_singular: "Post"
+    description: "Postingan blog disimpan di blog-data.json"
+    editor: { preview: false }
     files:
       - name: "blog_data"
         label: "Blog Data"
-        file: "blog-data.json"         # -> { "posts": [...] }
+        file: "blog-data.json"
         format: "json"
         fields:
           - label: "Posts"
@@ -37,7 +36,6 @@ collections:
             summary: "{{fields.title}} — {{fields.author}} ({{fields.date}})"
             collapsed: true
             fields:
-              - { label: "ID", name: "id", widget: "string", required: false }
               - { label: "Judul", name: "title", widget: "string" }
               - { label: "Tanggal", name: "date", widget: "datetime", time_format: false }
               - { label: "Penulis", name: "author", widget: "string", default: "Dr. Kurniawan" }
@@ -54,19 +52,18 @@ collections:
               - { label: "Tags", name: "tags", widget: "list", required: false }
               - { label: "Durasi Baca (menit)", name: "readMins", widget: "number", required: false, min: 1 }
               - { label: "Ringkasan", name: "excerpt", widget: "text", required: false }
-              - { label: "Konten (Markdown boleh)", name: "content", widget: "text" }
+              - { label: "Konten", name: "content", widget: "text" }
 
-  # ============================
-  # 2) GALLERY (single-file JSON)
-  # ============================
+  # GALLERY
   - name: "gallery"
     label: "Gallery"
-    editor:
-      preview: false
+    label_singular: "Item"
+    description: "Galeri foto/video disimpan di gallery-data.json"
+    editor: { preview: false }
     files:
       - name: "gallery_data"
         label: "Gallery Data"
-        file: "gallery-data.json"       # -> { "items": [...] }
+        file: "gallery-data.json"
         format: "json"
         fields:
           - label: "Items"
@@ -75,7 +72,6 @@ collections:
             summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
             collapsed: true
             fields:
-              - { label: "ID", name: "id", widget: "string", required: false }
               - { label: "Judul / Caption", name: "title", widget: "string" }
               - label: "Kategori"
                 name: "category"
@@ -94,50 +90,23 @@ collections:
                   - { label: "Gambar", value: "image" }
                   - { label: "YouTube / Video", value: "video" }
               - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
-              - label: "URL Media / YouTube ID"
-                name: "src"
-                widget: "string"
-                hint: "Gambar: URL Cloudinary/asset. Video: YouTube ID/URL."
-              - { label: "Thumbnail (opsional)", name: "thumb", widget: "image", required: false }
-              - { label: "Tags", name: "tags", widget: "list", required: false }
+              - { label: "URL Media / YouTube ID", name: "src", widget: "string" }
+              - { label: "Thumbnail", name: "thumb", widget: "image", required: false }
               - { label: "Deskripsi", name: "desc", widget: "text", required: false }
 
-  # =================================
-  # 3) PUBLICATIONS (single-file JSON)
-  # =================================
+  # PUBLICATIONS
   - name: "publications"
     label: "Publications"
-    editor:
-      preview: false
+    editor: { preview: false }
     files:
       - name: "publications_data"
         label: "Publications Data"
-        file: "publications-data.json"  # -> array langsung ATAU { "items": [...] }
+        file: "publications-data.json"
         format: "json"
         fields:
-          # Menangani dua kemungkinan bentuk data:
-          # - array langsung (gunakan "publications" list di bawah)
-          # - atau objek { items: [...] } (gunakan field "items")
-          - label: "Items"
-            name: "items"
-            widget: "list"
-            required: false
-            fields:
-              - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Authors", name: "authors", widget: "string" }
-              - { label: "Year", name: "year", widget: "number" }
-              - { label: "Tags", name: "tags", widget: "list", required: false }
-              - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
-              - { label: "Cover Image", name: "cover", widget: "image", required: false }
-              - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
-              - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
-              - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
-          - label: "Publications (Array Langsung)"
+          - label: "Publications"
             name: "publications"
             widget: "list"
-            required: false
-            hint: "Gunakan ini jika file kamu berupa array [] langsung."
             fields:
               - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
               - { label: "Title", name: "title", widget: "string" }
