@@ -6,6 +6,7 @@ local_backend: true
 publish_mode: editorial_workflow
 
 site_url: "https://drkurniawan.com"
+display_url: "https://drkurniawan.com"
 logo_url: "/assets/admin-logo.png"
 
 media_library:
@@ -21,112 +22,117 @@ media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
 collections:
-  # BLOG
+  # ===================
+  # BLOG (blog-data.json)
+  # ===================
   - name: "blog"
     label: "Blog"
     label_singular: "Post"
     description: "Postingan blog disimpan di blog-data.json"
-    editor: { preview: false }
-    files:
-      - name: "blog_data"
-        label: "Blog Data"
-        file: "blog-data.json"
-        format: "json"
+    editor:
+      preview: false
+    format: "json"
+    file: "blog-data.json"
+    fields:
+      - label: "Posts"
+        name: "posts"
+        widget: "list"
+        summary: "{{fields.title}} — {{fields.author}} ({{fields.date}})"
+        collapsed: true
         fields:
-          - label: "Posts"
-            name: "posts"
-            widget: "list"
-            summary: "{{fields.title}} — {{fields.author}} ({{fields.date}})"
-            collapsed: true
-            fields:
-              - { label: "Judul", name: "title", widget: "string" }
-              - { label: "Tanggal", name: "date", widget: "datetime", time_format: false }
-              - { label: "Penulis", name: "author", widget: "string", default: "Dr. Kurniawan" }
-              - { label: "Slug (URL)", name: "slug", widget: "string", required: false }
-              - { label: "Gambar Sampul", name: "cover", widget: "image", required: false }
-              - label: "Kategori"
-                name: "cat"
-                widget: "select"
-                options:
-                  - { label: "Public Speaking", value: "public-speaking" }
-                  - { label: "Self Confidence", value: "self-confidence" }
-                  - { label: "Parenting", value: "parenting" }
-                  - { label: "Catatan", value: "notes" }
-              - { label: "Tags", name: "tags", widget: "list", required: false }
-              - { label: "Durasi Baca (menit)", name: "readMins", widget: "number", required: false, min: 1 }
-              - { label: "Ringkasan", name: "excerpt", widget: "text", required: false }
-              - { label: "Konten", name: "content", widget: "text" }
+          - { label: "Judul", name: "title", widget: "string" }
+          - { label: "Tanggal", name: "date", widget: "datetime", time_format: false }
+          - { label: "Penulis", name: "author", widget: "string", default: "Dr. Kurniawan" }
+          - { label: "Slug (URL)", name: "slug", widget: "string", required: false }
+          - { label: "Gambar Sampul", name: "cover", widget: "image", required: false }
+          - label: "Kategori"
+            name: "cat"
+            widget: "select"
+            options:
+              - { label: "Public Speaking", value: "public-speaking" }
+              - { label: "Self-Esteem", value: "self-esteem" }
+              - { label: "Parenting", value: "parenting" }
+              - { label: "Career", value: "career" }
+          - { label: "Tags", name: "tags", widget: "list", required: false }
+          - { label: "Ringkasan", name: "excerpt", widget: "text", required: false }
+          - { label: "Konten", name: "content", widget: "text" }
 
-  # GALLERY
- - name: "gallery"
-  label: "Gallery"
-  label_singular: "Item"
-  description: "Galeri foto/video disimpan di gallery-data.json"
-  format: "json"
-  editor:
-    preview: false
-  file: "gallery-data.json"
-  fields:
-    - label: "Items"
-      name: "items"
-      widget: "list"
-      summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
-      collapsed: true
-      fields:
-        - { label: "Judul / Caption", name: "title", widget: "string" }
-        - label: "Kategori"
-          name: "category"
-          widget: "select"
-          options:
-            - { label: "Seminar", value: "seminar" }
-            - { label: "Workshop", value: "workshop" }
-            - { label: "Keynote", value: "keynote" }
-            - { label: "Sekolah/Komunitas", value: "school" }
-            - { label: "Media/TV", value: "media" }
-            - { label: "Video", value: "video" }
-        - label: "Jenis"
-          name: "type"
-          widget: "select"
-          options:
-            - { label: "Gambar", value: "image" }
-            - { label: "Video",  value: "video" }
-        - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
-        - label: "Media (Cloudinary/URL)"
-          name: "src"
-          widget: "file"
-          required: false
-          hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi."
-        - label: "YouTube (ID atau URL)"
-          name: "youtube"
-          widget: "string"
-          required: false
-          hint: "Isi salah satu: YouTube atau Media di atas."
-        - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
-        - { label: "Tags", name: "tags", widget: "list", required: false }
-        - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+  # ======================
+  # GALLERY (gallery-data.json)
+  # ======================
+  - name: "gallery"
+    label: "Gallery"
+    label_singular: "Item"
+    description: "Galeri foto/video disimpan di gallery-data.json"
+    editor:
+      preview: false
+    format: "json"
+    file: "gallery-data.json"
+    fields:
+      - label: "Items"
+        name: "items"
+        widget: "list"
+        summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
+        collapsed: true
+        fields:
+          - { label: "Judul / Caption", name: "title", widget: "string" }
+          - label: "Kategori"
+            name: "category"
+            widget: "select"
+            options:
+              - { label: "Seminar", value: "seminar" }
+              - { label: "Workshop", value: "workshop" }
+              - { label: "Keynote", value: "keynote" }
+              - { label: "Sekolah/Komunitas", value: "school" }
+              - { label: "Media/TV", value: "media" }
+              - { label: "Video", value: "video" }
+          - label: "Jenis"
+            name: "type"
+            widget: "select"
+            options:
+              - { label: "Gambar", value: "image" }
+              - { label: "Video",  value: "video" }
+          - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
 
+          # Media file dari Cloudinary (opsional). HEIC akan dikonversi otomatis.
+          - label: "Media (Cloudinary/URL)"
+            name: "src"
+            widget: "file"
+            required: false
+            hint: "Pilih dari Cloudinary. HEIC otomatis dikonversi (f_auto,q_auto)."
 
-  # PUBLICATIONS
+          # Sumber YouTube opsional (ID atau URL)
+          - label: "YouTube (ID atau URL)"
+            name: "youtube"
+            widget: "string"
+            required: false
+            hint: "Isi salah satu: YouTube atau Media di atas."
+
+          - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
+          - { label: "Tags", name: "tags", widget: "list", required: false }
+          - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+
+  # ============================
+  # PUBLICATIONS (publications-data.json)
+  # ============================
   - name: "publications"
     label: "Publications"
-    editor: { preview: false }
-    files:
-      - name: "publications_data"
-        label: "Publications Data"
-        file: "publications-data.json"
-        format: "json"
+    editor:
+      preview: false
+    format: "json"
+    file: "publications-data.json"
+    fields:
+      - label: "Publications"
+        name: "publications"
+        widget: "list"
         fields:
-          - label: "Publications"
-            name: "publications"
-            widget: "list"
-            fields:
-              - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
-              - { label: "Title", name: "title", widget: "string" }
-              - { label: "Authors", name: "authors", widget: "string" }
-              - { label: "Year", name: "year", widget: "number" }
-              - { label: "Tags", name: "tags", widget: "list", required: false }
-              - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
-              - { label: "Cover Image", name: "cover", widget: "image", required: false }
-              - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
-              - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
-              - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
+          - { label: "Type", name: "type", widget: "select", options: ["journal", "book", "ebook"] }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Authors", name: "authors", widget: "string", required: false }
+          - { label: "Year", name: "year", widget: "number", required: false }
+          - { label: "Tags", name: "tags", widget: "list", required: false }
+          - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+          - { label: "Cover Image", name: "cover", widget: "image", required: false }
+          - { label: "PDF Link", name: "link_pdf", widget: "string", required: false }
+          - { label: "DOI Link", name: "link_doi", widget: "string", required: false }
+          - { label: "Buy Link", name: "link_buy", widget: "string", required: false }
