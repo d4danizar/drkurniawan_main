@@ -141,15 +141,16 @@
     if (!container) return;
 
     try {
-      const res = await fetch('blog-data.json', { cache: 'no-store' });
+      // 🔧 pakai path absolut + cache-buster
+      const res = await fetch(`/blog-data.json?v=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       const posts = Array.isArray(data) ? data : data.posts || [];
 
-      // Sort (newest first)
+      // Urut terbaru dulu
       posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
-      // Render list
+      // Render
       container.innerHTML = '';
       posts.forEach(p => {
         const mins = p.readMins || estimateReadMins(p.content || '');
@@ -159,23 +160,21 @@
         article.className = 'card';
         article.dataset.tags = [cat, ...(p.tags || [])].join(' ');
 
-       article.innerHTML = `
+        article.innerHTML = `
           <a href="post.html?slug=${p.slug}">
-          ${p.cover ? `<img src="${p.cover}" alt="${p.title}">` : ''}
-          <small>${p.date || ''} • ${mins} min read</small>
-          <h3>${p.title || ''}</h3>
-          <p>${p.excerpt || ''}</p>
-          <div class="meta">
-            <span class="badge">${cat.replace(/-/g, ' ')}</span>
-          </div>
+            ${p.cover ? `<img src="${p.cover}" alt="${p.title}">` : ''}
+            <small>${p.date || ''} • ${mins} min read</small>
+            <h3>${p.title || ''}</h3>
+            <p>${p.excerpt || ''}</p>
+            <div class="meta">
+              <span class="badge">${cat.replace(/-/g, ' ')}</span>
+            </div>
           </a>
-      `;
-
-
+        `;
         container.appendChild(article);
       });
 
-      // === Filter (chips + search) tetap bekerja ===
+      // Filter tetap
       const search = document.getElementById('search');
       const chips = document.querySelectorAll('.chip');
       let activeTag = 'all';
@@ -183,7 +182,6 @@
       function filterPosts() {
         const q = (search?.value || '').toLowerCase();
         const cards = container.querySelectorAll('.card');
-
         cards.forEach(card => {
           const text = card.innerText.toLowerCase();
           const tags = card.dataset.tags.split(' ');
@@ -194,14 +192,12 @@
       }
 
       search?.addEventListener('input', filterPosts);
-      chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-          activeTag = chip.dataset.tag;
-          filterPosts();
-        });
-      });
+      chips.forEach(chip => chip.addEventListener('click', () => { activeTag = chip.dataset.tag; filterPosts(); }));
 
-      
+      // Optional: tampilkan empty state
+      if (posts.length === 0) {
+        container.innerHTML = '<p class="muted">Belum ada artikel.</p>';
+      }
     } catch (err) {
       console.warn('Gagal memuat blog-data.json:', err);
     }
@@ -210,6 +206,7 @@
   
 </body>
 </html>
+
 
 
 
