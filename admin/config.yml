@@ -58,63 +58,52 @@ collections:
               - { label: "Konten", name: "content", widget: "text" }
 
   # GALLERY
-  - name: "gallery"
-    label: "Gallery"
-    label_singular: "Item"
-    description: "Galeri foto/video disimpan di gallery-data.json"
-    editor: { preview: false }
-    files:
-      - name: "gallery_data"
-        label: "Gallery Data"
-        file: "gallery-data.json"
-        format: "json"
-        fields:
-                - label: "Items"
-        name: "items"
-        widget: "list"
-        summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
-        collapsed: true
-        fields:
-          - { label: "Judul / Caption", name: "title", widget: "string" }
-
-          - label: "Kategori"
-            name: "category"
-            widget: "select"
-            options:
-              - { label: "Seminar", value: "seminar" }
-              - { label: "Workshop", value: "workshop" }
-              - { label: "Keynote", value: "keynote" }
-              - { label: "Sekolah/Komunitas", value: "school" }
-              - { label: "Media/TV", value: "media" }
-              - { label: "Video", value: "video" }
-
-          - label: "Jenis"
-            name: "type"
-            widget: "select"
-            options:
-              - { label: "Gambar", value: "image" }
-              - { label: "Video",  value: "video" }
-
-          - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
-
-          # Media file dari Cloudinary (gambar / video). OPTIONAL.
-          - label: "Media (Cloudinary/URL)"
-            name: "src"
-            widget: "file"
-            required: false
-            hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi."
-
-          # Khusus kalau sumbernya YouTube (ID atau URL). OPTIONAL.
-          - label: "YouTube (ID atau URL)"
-            name: "youtube"
-            widget: "string"
-            required: false
-            hint: "Isi salah satu: YouTube atau Media di atas."
-
-          - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
-
-          - { label: "Tags", name: "tags", widget: "list", required: false }
-          - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+ - name: "gallery"
+  label: "Gallery"
+  label_singular: "Item"
+  description: "Galeri foto/video disimpan di gallery-data.json"
+  format: "json"
+  editor:
+    preview: false
+  file: "gallery-data.json"
+  fields:
+    - label: "Items"
+      name: "items"
+      widget: "list"
+      summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
+      collapsed: true
+      fields:
+        - { label: "Judul / Caption", name: "title", widget: "string" }
+        - label: "Kategori"
+          name: "category"
+          widget: "select"
+          options:
+            - { label: "Seminar", value: "seminar" }
+            - { label: "Workshop", value: "workshop" }
+            - { label: "Keynote", value: "keynote" }
+            - { label: "Sekolah/Komunitas", value: "school" }
+            - { label: "Media/TV", value: "media" }
+            - { label: "Video", value: "video" }
+        - label: "Jenis"
+          name: "type"
+          widget: "select"
+          options:
+            - { label: "Gambar", value: "image" }
+            - { label: "Video",  value: "video" }
+        - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
+        - label: "Media (Cloudinary/URL)"
+          name: "src"
+          widget: "file"
+          required: false
+          hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi."
+        - label: "YouTube (ID atau URL)"
+          name: "youtube"
+          widget: "string"
+          required: false
+          hint: "Isi salah satu: YouTube atau Media di atas."
+        - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
+        - { label: "Tags", name: "tags", widget: "list", required: false }
+        - { label: "Deskripsi", name: "desc", widget: "text", required: false }
 
 
   # PUBLICATIONS
