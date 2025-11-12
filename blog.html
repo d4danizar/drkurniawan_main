@@ -231,67 +231,12 @@ async function loadBlog() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadBlog);
-
-async function loadBlog() {
-  const container = document.getElementById('posts');
-  if (!container) return;
-
-  try {
-    // pakai path absolut + cache-buster
-    const res = await fetch('/blog-data.json?v=' + Date.now(), { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-
-    const data = await res.json();
-    const posts = Array.isArray(data?.posts) ? data.posts : (Array.isArray(data) ? data : []);
-
-    // kalau kosong, tampilkan empty state
-    if (!posts.length) {
-      container.innerHTML = '<p class="muted">Belum ada artikel.</p>';
-      return;
-    }
-
-    // urut terbaru dulu
-    posts.sort((a,b) => String(b.date||'').localeCompare(String(a.date||'')));
-
-    container.innerHTML = '';
-    for (const p of posts) {
-      const mins = p.readMins || estimateReadMins(p.content || '');
-      const dateStr = formatDateID(p.date);
-      const coverHTML = p.cover ? '<img src="' + esc(p.cover) + '" alt="' + esc(p.title||'') + '">' : '';
-
-      const article = document.createElement('article');
-      article.className = 'card';
-      article.dataset.tags = [p.cat || 'notes', ...(p.tags || [])].join(' ');
-
-      article.innerHTML =
-        '<a href="post.html?slug=' + encodeURIComponent(p.slug || '') + '">' +
-          coverHTML +
-          '<small>' +
-            (dateStr ? esc(dateStr) : '') +
-            (dateStr && mins ? ' • ' : '') +
-            (mins ? esc(mins + ' min read') : '') +
-          '</small>' +
-          '<h3>' + esc(p.title || '') + '</h3>' +
-          '<p>' + esc(p.excerpt || '') + '</p>' +
-          '<div class="meta"><span class="badge">' + esc((p.cat || 'notes').replace(/-/g,' ')) + '</span></div>' +
-        '</a>';
-
-      container.appendChild(article);
-    }
-
-    // (opsional) kalau kamu punya input pencarian/chips filter, panggil fungsi filter-mu di sini
-    // filterPosts();
-  } catch (err) {
-    console.error('Gagal memuat blog-data.json:', err);
-    container.innerHTML = '<p class="muted">Gagal memuat artikel.</p>';
-  }
-}
 </script>
 
   
 </body>
 </html>
+
 
 
 
