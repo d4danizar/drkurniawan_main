@@ -79,6 +79,48 @@
 
 
   </style>
+  <script>
+    function safeSrc(url) {
+  if (!url) return '';
+  // Cloudinary -> jamin https + auto format/quality
+  if (/^https?:\/\/res\.cloudinary\.com\//i.test(url)) {
+    return url
+      .replace(/^http:/i, 'https:')
+      .replace(/\/image\/upload\/(?!f_auto,q_auto\/)/, '/image/upload/f_auto,q_auto/');
+  }
+  // Lokal -> pastikan absolute & encoded (TAPI: HEIC lokal tetap tak bisa di browser)
+  const u = url.startsWith('/') ? url : '/' + url.replace(/^\.?\//, '');
+  return encodeURI(u);
+}
+
+// Render card gallery:
+function renderItem(item){
+  const type = item.type || 'image';
+  const src  = safeSrc(item.src);
+  const thumb = safeSrc(item.thumb || item.src);
+
+  if (type === 'video') {
+    return `
+      <article class="g-item">
+        <video controls preload="metadata" poster="${thumb || ''}">
+          <source src="${src}" type="video/mp4">
+          <source src="${src}" type="video/webm">
+          Browser Anda tidak mendukung video tag.
+        </video>
+        <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
+      </article>
+    `;
+  } else {
+    return `
+      <article class="g-item">
+        <img loading="lazy" src="${src}" alt="${(item.title||'').replace(/"/g,'&quot;')}"
+             onerror="this.onerror=null; this.src='/assets/uploads/placeholder.jpg'; console.warn('Image failed:', this.currentSrc);" />
+        <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
+      </article>
+    `;
+  }
+}  
+  </script>
 </head>
 <body>
   <!-- NAV -->
@@ -434,48 +476,6 @@
     }
   }
   loadGallery();
-
-
-function safeSrc(url) {
-  if (!url) return '';
-  // Cloudinary -> jamin https + auto format/quality
-  if (/^https?:\/\/res\.cloudinary\.com\//i.test(url)) {
-    return url
-      .replace(/^http:/i, 'https:')
-      .replace(/\/image\/upload\/(?!f_auto,q_auto\/)/, '/image/upload/f_auto,q_auto/');
-  }
-  // Lokal -> pastikan absolute & encoded (TAPI: HEIC lokal tetap tak bisa di browser)
-  const u = url.startsWith('/') ? url : '/' + url.replace(/^\.?\//, '');
-  return encodeURI(u);
-}
-
-// Render card gallery:
-function renderItem(item){
-  const type = item.type || 'image';
-  const src  = safeSrc(item.src);
-  const thumb = safeSrc(item.thumb || item.src);
-
-  if (type === 'video') {
-    return `
-      <article class="g-item">
-        <video controls preload="metadata" poster="${thumb || ''}">
-          <source src="${src}" type="video/mp4">
-          <source src="${src}" type="video/webm">
-          Browser Anda tidak mendukung video tag.
-        </video>
-        <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
-      </article>
-    `;
-  } else {
-    return `
-      <article class="g-item">
-        <img loading="lazy" src="${src}" alt="${(item.title||'').replace(/"/g,'&quot;')}"
-             onerror="this.onerror=null; this.src='/assets/uploads/placeholder.jpg'; console.warn('Image failed:', this.currentSrc);" />
-        <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
-      </article>
-    `;
-  }
-}  
   </script>
 </body>
 </html>
