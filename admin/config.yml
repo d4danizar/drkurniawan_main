@@ -75,27 +75,42 @@ collections:
             summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
             collapsed: true
             fields:
-              - { label: "Judul / Caption", name: "title", widget: "string" }
-              - label: "Kategori"
-                name: "category"
-                widget: "select"
-                options:
-                  - { label: "Seminar", value: "seminar" }
-                  - { label: "Workshop", value: "workshop" }
-                  - { label: "Keynote", value: "keynote" }
-                  - { label: "Sekolah/Komunitas", value: "school" }
-                  - { label: "Media/TV", value: "media" }
-                  - { label: "Video", value: "video" }
-              - label: "Jenis"
-                name: "type"
-                widget: "select"
-                options:
-                  - { label: "Gambar", value: "image" }
-                  - { label: "YouTube / Video", value: "video" }
-              - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
-              - { label: "URL Media / YouTube ID", name: "src", widget: "string", required: false }
-              - { label: "Thumbnail", name: "thumb", widget: "image", required: false }
-              - { label: "Deskripsi", name: "desc", widget: "text", required: false }
+                    - label: "Items"
+        name: "items"
+        widget: "list"
+        summary: "{{fields.title}} — {{fields.category}} ({{fields.type}})"
+        collapsed: true
+        fields:
+          - { label: "Judul / Caption", name: "title", widget: "string" }
+          - label: "Kategori"
+            name: "category"
+            widget: "select"
+            options:
+              - { label: "Seminar", value: "seminar" }
+              - { label: "Workshop", value: "workshop" }
+              - { label: "Keynote", value: "keynote" }
+              - { label: "Sekolah/Komunitas", value: "school" }
+              - { label: "Media/TV", value: "media" }
+              - { label: "Video", value: "video" }
+          - label: "Jenis"
+            name: "type"
+            widget: "select"
+            options:
+              - { label: "Gambar", value: "image" }
+              - { label: "YouTube / Video", value: "video" }
+          - { label: "Tanggal", name: "date", widget: "datetime", required: false, time_format: false }
+
+          #HEIC via Cloudinary otomatis dikonversi
+          - label: "URL Media / YouTube ID"
+            name: "src"
+            widget: "file"
+            hint: "Pilih dari Cloudinary. HEIC akan otomatis dikonversi (f_auto,q_auto). Untuk YouTube, isi dengan URL/ID."
+
+          # opsional thumb juga "file" biar bisa ambil dari Cloudinary
+          - { label: "Thumbnail (opsional)", name: "thumb", widget: "file", required: false }
+
+          - { label: "Tags", name: "tags", widget: "list", required: false }
+          - { label: "Deskripsi", name: "desc", widget: "text", required: false }
 
   # PUBLICATIONS
   - name: "publications"
