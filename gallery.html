@@ -79,48 +79,70 @@
 
 
   </style>
+
   <script>
-    function safeSrc(url) {
-  if (!url) return '';
-  // Cloudinary -> jamin https + auto format/quality
-  if (/^https?:\/\/res\.cloudinary\.com\//i.test(url)) {
-    return url
-      .replace(/^http:/i, 'https:')
-      .replace(/\/image\/upload\/(?!f_auto,q_auto\/)/, '/image/upload/f_auto,q_auto/');
+function safeSrc(src) {
+  if (!src) return '';
+  src = String(src).trim();
+  // Cloudinary
+  if (/^https?:\/\/res\.cloudinary\.com\//i.test(src)) {
+    return src.replace(/^http:/i, 'https:')
+              .replace(/\/image\/upload\/(?!f_auto,q_auto\/)/, '/image/upload/f_auto,q_auto/');
   }
-  // Lokal -> pastikan absolute & encoded (TAPI: HEIC lokal tetap tak bisa di browser)
-  const u = url.startsWith('/') ? url : '/' + url.replace(/^\.?\//, '');
-  return encodeURI(u);
+  // URL luar -> fetch via Cloudinary
+  if (/^https?:\/\//i.test(src)) {
+    return `https://res.cloudinary.com/dy7lzcjfb/image/fetch/f_auto,q_auto/${encodeURIComponent(src)}`;
+  }
+  // Path lokal -> absolut lalu fetch via Cloudinary (buat HEIC)
+  const abs = src.startsWith('/') ? src : '/' + src.replace(/^\.?\//,'');
+  const full = `${location.origin}${abs}`;
+  return `https://res.cloudinary.com/dy7lzcjfb/image/fetch/f_auto,q_auto/${encodeURIComponent(full)}`;
 }
 
-// Render card gallery:
-function renderItem(item){
-  const type = item.type || 'image';
-  const src  = safeSrc(item.src);
-  const thumb = safeSrc(item.thumb || item.src);
+function normalizeYouTube(y) {
+  if (!y) return '';
+  const s = String(y).trim();
+  const m = s.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : s; // kalau user kasih URL, ambil ID-nya; kalau sudah ID, pakai apa adanya
+}
 
-  if (type === 'video') {
-    return `
+// di dalam loop render item:
+const ytId = normalizeYouTube(item.youtube);
+if (ytId) {
+  html = `
+    <article class="g-item">
+      <div class="yt">
+        <iframe width="560" height="315"
+          src="https://www.youtube.com/embed/${ytId}"
+          title="YouTube video player" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
+    </article>`;
+} else {
+  const src = safeSrc(item.src);
+  const thumb = safeSrc(item.thumb || item.src);
+  if ((item.type||'image') === 'video') {
+    html = `
       <article class="g-item">
-        <video controls preload="metadata" poster="${thumb || ''}">
-          <source src="${src}" type="video/mp4">
-          <source src="${src}" type="video/webm">
-          Browser Anda tidak mendukung video tag.
+        <video controls preload="metadata" ${thumb ? `poster="${thumb}"` : ''}>
+          <source src="${src}">
         </video>
         <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
-      </article>
-    `;
+      </article>`;
   } else {
-    return `
+    html = `
       <article class="g-item">
         <img loading="lazy" src="${src}" alt="${(item.title||'').replace(/"/g,'&quot;')}"
-             onerror="this.onerror=null; this.src='/assets/uploads/placeholder.jpg'; console.warn('Image failed:', this.currentSrc);" />
+             onerror="this.onerror=null; this.src='/assets/uploads/placeholder.jpg'; console.warn('IMG fail:', this.currentSrc);" />
         <h4>${(item.title||'').replace(/</g,'&lt;')}</h4>
-      </article>
-    `;
+      </article>`;
   }
-}  
-  </script>
+}
+</script>
+
+  
 </head>
 <body>
   <!-- NAV -->
